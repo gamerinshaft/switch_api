@@ -1,4 +1,3 @@
-# app/apis/api/v1/base.rb
 
 module API
   module V1
@@ -25,14 +24,14 @@ module API
       # 例外ハンドル 500
       rescue_from :all do |e|
         if Rails.env.development?
-          raise e
+          fail e
         else
-          error_response(message: "Internal server error", status: 500)
+          error_response(message: 'Internal server error', status: 500)
         end
       end
 
       mount V1::Users
-      add_swagger_documentation :format => :json, :api_version => 'v1', :hide_documentation_path => true
+      add_swagger_documentation format: :json, api_version: 'v1', hide_documentation_path: true
     end
   end
 end
