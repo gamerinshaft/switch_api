@@ -7,20 +7,12 @@ module API
       resource :users do
         desc 'GET /api/v1/users/hello', {
           :notes => <<-NOTE
-            Virgins in heaven
-            -----------------
-
-            > A virgin doesn't come for free
-
-            If you want to reserve a virgin in heaven, you have to do
-            some crazy stuff on earth.
-
-                def do_good
-                  puts 'help people'
-                end
-
-            * _Will go to Heaven:_ Probably
-            * _Will go to Hell:_ Probably not
+            <h1>helloと返すAPI</h1>
+            <hr>
+            <p>
+            このURLにアクセスするとHelloを返してくれます。<br>
+            実際にリクエストできてるか確認するためのAPIです。
+            </p>
           NOTE
         }
         get '/hello', jbuilder: 'api/v1/users/hello' do
