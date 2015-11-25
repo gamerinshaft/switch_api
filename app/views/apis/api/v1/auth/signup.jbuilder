@@ -1,0 +1,1 @@
+json.greet @hoge

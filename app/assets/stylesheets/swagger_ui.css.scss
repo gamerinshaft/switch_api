@@ -267,6 +267,7 @@ html, body#swagger{
                   }
                   input.submit{
                     margin-bottom: 24px;
+                    margin-top: 16px;
                   }
                   pre {
                     background-color: #F1F1F1;
@@ -282,8 +283,46 @@ html, body#swagger{
                     border-radius: 4px;
                     color: black;
                   }
+                  table{
+                    border-collapse: collapse;
+                  }
+                  th{
+                    border: 1px solid #ddd;
+                    padding: 2px 4px;
+                    font-size: 10px;
+                    background-color: #eee;
+                  }
+                  td{
+                    border: 1px solid #ddd;
+                    font-size: 14px;
+                    padding: 2px 4px;
+                    position: relative;
+                    input{
+                      position: absolute;
+                      top: 0px;
+                      left: 0px;
+                      bottom: 0px;
+                      right: 0px;
+                      width: 95%;
+                      margin: 0px;
+                      display: block;
+                      margin: 0px;
+                      border: none;
+                      outline: none;
+                      font-size: 14px;
+                      padding-left: 4px;
+                      -webkit-font-smoothing: antialiased;
+                      color: #555;
+                    }
+                    strong{
+                      font-size: 12px;
+                      color: #555;
+                    }
+                  }
                   h4{
-                    margin: 0px;
+                    margin: 4px 0px;
+                    margin-top: 16px;
+                    color: #555;
                   }
                   & > * {
                     margin: 0px 40px;

@@ -57,7 +57,6 @@ module API
         desc '<input value="/api/v1/users/hello"><span>ユーザー作成</span>', {
           notes: <<-NOTE
             <h1>helloと返すAPI</h1>
-            <hr>
             <p>
             このURLにアクセスするとHelloを返してくれます。<br>
             実際にリクエストできてるか確認するためのAPIです。
