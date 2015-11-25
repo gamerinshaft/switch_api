@@ -25,6 +25,10 @@ module API
         params :id do
           requires :id, type: Integer, desc: "MessageBoard id."
         end
+
+        params :token do
+          requires :auth_token, type: String, desc: "auth_token"
+        end
       end
       resource :users do
         desc '<input value="/api/v1/users/hello"><span>確認用のテストAPI</span>', {
@@ -51,6 +55,32 @@ module API
           user = save_object(User.new())
           @token = user.auth_tokens.new_token
         end
+
+        resource :info do
+          desc '<input value="/api/v1/users/hello"><span>ユーザー情報の表示</span>', {
+            notes: <<-NOTE
+              <h1>helloと返すAPI</h1>
+              <p>
+              このURLにアクセスするとHelloを返してくれます。<br>
+              実際にリクエストできてるか確認するためのAPIです。
+              </p>
+            NOTE
+          }
+          params do
+            use :token
+          end
+          get '/', jbuilder: 'api/v1/users/info/show' do
+            if user.info == nil
+              error!(json: {
+                 errors: [
+                     message: ('info did not create'),
+                     code: ErrorCodes::NOT_FOUND
+                 ]
+              }, status: 400)
+            end
+            @info = user.info
+          end
+        end
       end
 
       resource :devices do
@@ -64,7 +94,7 @@ module API
           NOTE
         }
         get '/hello', jbuilder: 'api/v1/users/hello' do
-          @hoge = 'hello'
+          @hoge = user
         end
       end
       #   resource :message_boards do
