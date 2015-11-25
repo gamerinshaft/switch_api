@@ -4,7 +4,7 @@ class AuthToken < ActiveRecord::Base
   validates :user, presence: true
   validates :token, presence: true, uniqueness: true
 
-  def self.generate_token()
+  def self.generate_token
     create!(token: SecureRandom.urlsafe_base64)
   end
 

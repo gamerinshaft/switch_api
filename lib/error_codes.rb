@@ -18,5 +18,5 @@ module ErrorCodes
   TOO_MANY_REQUESTS       = 17
   NOT_FOUND               = 18
   TIMEOUT                 = 19
-  ALREADY_EXISTING         = 20
+  ALREADY_EXISTING = 20
 end

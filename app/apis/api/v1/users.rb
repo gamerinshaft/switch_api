@@ -17,66 +17,60 @@ module API
         # パラメーターの必須、任意を指定することができる。
         # use :attributesという形で使うことができる。
         params :attributes do
-          requires :password, type: String, desc: "User Password."
+          requires :password, type: String, desc: 'User Password.'
           # optional :body, type: String, desc: "MessageBoard body."
         end
 
         # パラメータのチェック
         params :id do
-          requires :id, type: Integer, desc: "MessageBoard id."
+          requires :id, type: Integer, desc: 'MessageBoard id.'
         end
 
         params :token do
-          requires :auth_token, type: String, desc: "auth_token"
+          requires :auth_token, type: String, desc: 'auth_token'
         end
       end
       resource :users do
-        desc '<input value="/api/v1/users/hello"><span>確認用のテストAPI</span>', {
-          notes: <<-NOTE
+        desc '<input value="/api/v1/users/hello"><span>確認用のテストAPI</span>', notes: <<-NOTE
             <h1>helloと返すAPI</h1>
             <p>
             このURLにアクセスするとHelloを返してくれます。<br>
             実際にリクエストできてるか確認するためのAPIです。
             </p>
           NOTE
-        }
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = 'hello'
         end
-        desc '<input value="/api/v1/users"><span>ユーザー作成</span>', {
-          notes: <<-NOTE
+        desc '<input value="/api/v1/users"><span>ユーザー作成</span>', notes: <<-NOTE
             <h1>Userを作成するAPI</h1>
             <p>
             このURLにアクセスするとUserを作るよ。
             </p>
           NOTE
-        }
         post '/', jbuilder: 'api/v1/users/create' do
-          user = save_object(User.new())
+          user = save_object(User.new)
           @token = user.auth_tokens.new_token
         end
 
         resource :info do
-          desc '<input value="/api/v1/users/hello"><span>ユーザー情報の表示</span>', {
-            notes: <<-NOTE
+          desc '<input value="/api/v1/users/hello"><span>ユーザー情報の表示</span>', notes: <<-NOTE
               <h1>helloと返すAPI</h1>
               <p>
               このURLにアクセスするとHelloを返してくれます。<br>
               実際にリクエストできてるか確認するためのAPIです。
               </p>
             NOTE
-          }
           params do
             use :token
           end
           get '/', jbuilder: 'api/v1/users/info/show' do
-            if user.info == nil
+            if user.info.nil?
               error!(json: {
-                 errors: [
-                     message: ('info did not create'),
-                     code: ErrorCodes::NOT_FOUND
-                 ]
-              }, status: 400)
+                       errors: [
+                         message: ('info did not create'),
+                         code: ErrorCodes::NOT_FOUND
+                       ]
+                     }, status: 400)
             end
             @info = user.info
           end
@@ -84,15 +78,13 @@ module API
       end
 
       resource :devices do
-        desc '<input value="/api/v1/users/hello"><span>ユーザー作成</span>', {
-          notes: <<-NOTE
+        desc '<input value="/api/v1/users/hello"><span>ユーザー作成</span>', notes: <<-NOTE
             <h1>helloと返すAPI</h1>
             <p>
             このURLにアクセスするとHelloを返してくれます。<br>
             実際にリクエストできてるか確認するためのAPIです。
             </p>
           NOTE
-        }
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = user
         end

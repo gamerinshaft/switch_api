@@ -10,13 +10,13 @@ module API
           errors = []
           object.errors.each do |key, value|
             errors << {
-                message: "#{key} #{value}",
-                code: ErrorCodes::FAIL_SAVE
+              message: "#{key} #{value}",
+              code: ErrorCodes::FAIL_SAVE
             }
           end
-          error!( json:{
-                     errors: errors
-                  }, status: 400
+          error!(json: {
+                   errors: errors
+                 }, status: 400
                 )
           false
         end
@@ -40,14 +40,14 @@ module API
 
       def authenticate_user!
         unless user_signed_in?
-          error!( json: {
-                    errors: [
-                      {
-                        message: t('errors.messages.invalid_auth_token'),
-                        code: ErrorCodes::INVALID_TOKEN
-                      }
-                    ]
-                  }, status: 400
+          error!(json: {
+                   errors: [
+                     {
+                       message: t('errors.messages.invalid_auth_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     }
+                   ]
+                 }, status: 400
                 )
         end
       end

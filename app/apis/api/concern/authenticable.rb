@@ -19,17 +19,15 @@ module Authenticable
 
   def authenticate_user!
     unless user_signed_in?
-      error!( json: {
-                errors: [
-                  {
-                    message: t('errors.messages.invalid_auth_token'),
-                    code: ErrorCodes::INVALID_TOKEN
-                  }
-                ]
-              }, status: 400
+      error!(json: {
+               errors: [
+                 {
+                   message: t('errors.messages.invalid_auth_token'),
+                   code: ErrorCodes::INVALID_TOKEN
+                 }
+               ]
+             }, status: 400
             )
     end
   end
-
 end
-

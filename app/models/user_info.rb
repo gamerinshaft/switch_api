@@ -26,7 +26,7 @@ class UserInfo < ActiveRecord::Base
       return
     end
 
-    if raw_password.kind_of?(String)
+    if raw_password.is_a?(String)
       self.hashed_password = BCrypt::Password.create(raw_password)
     elsif raw_password.nil?
       self.hashed_password = nil
