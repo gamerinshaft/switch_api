@@ -3,6 +3,29 @@
 module API
   module V1
     class Users < Grape::API
+      helpers do
+        # Strong Parametersの設定
+        def message_board_params
+          ActionController::Parameters.new(params).permit(:title, :body)
+        end
+
+        def set_message_board
+          @message_board = MessageBoard.find(params[:id])
+        end
+
+        # パラメータのチェック
+        # パラメーターの必須、任意を指定することができる。
+        # use :attributesという形で使うことができる。
+        params :attributes do
+          requires :password, type: String, desc: "User Password."
+          # optional :body, type: String, desc: "MessageBoard body."
+        end
+
+        # パラメータのチェック
+        params :id do
+          requires :id, type: Integer, desc: "MessageBoard id."
+        end
+      end
       resource :users do
         desc 'GET /api/v1/users/hello', {
           notes: <<-NOTE
@@ -17,30 +40,23 @@ module API
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = 'hello'
         end
+        desc 'POST /api/v1/users', {
+          notes: <<-NOTE
+            <h1>Userを作成するAPI</h1>
+            <hr>
+            <p>
+            このURLにアクセスするとUserを作るよ。
+            </p>
+          NOTE
+        }
+        params do
+          use :attributes
+        end
+        post '/', jbuilder: 'api/v1/users/create' do
+          user = User.new()
+          user.save()
+        end
       end
-      #   helpers do
-      #     # Strong Parametersの設定
-      #     def message_board_params
-      #       ActionController::Parameters.new(params).permit(:title, :body)
-      #     end
-
-      #     def set_message_board
-      #       @message_board = MessageBoard.find(params[:id])
-      #     end
-
-      #     # パラメータのチェック
-      #     # パラメーターの必須、任意を指定することができる。
-      #     # use :attributesという形で使うことができる。
-      #     params :attributes do
-      #       requires :title, type: String, desc: "MessageBoard title."
-      #       optional :body, type: String, desc: "MessageBoard body."
-      #     end
-
-      #     # パラメータのチェック
-      #     params :id do
-      #       requires :id, type: Integer, desc: "MessageBoard id."
-      #     end
-      #   end
 
       #   resource :message_boards do
       #     desc 'GET /api/v1/message_boards'
