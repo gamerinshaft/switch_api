@@ -45,4 +45,14 @@ group :development, :test do
 
   gem 'spring'
   gem 'rubocop'
+  gem 'rails-erd'
+  gem 'pry-rails'
+  gem 'pry-doc'
+  gem 'pry-byebug'
+  gem 'hirb'
+  gem 'hirb-unicode'
+  gem 'tapp'
+  gem 'awesome_print'
+  gem 'quiet_assets'
+  gem 'annotate'
 end
