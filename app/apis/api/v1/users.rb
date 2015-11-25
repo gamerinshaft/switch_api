@@ -5,7 +5,24 @@ module API
     class Users < Grape::API
 
       resource :users do
-        desc 'GET /api/v1/users/hello'
+        desc 'GET /api/v1/users/hello', {
+          :notes => <<-NOTE
+            Virgins in heaven
+            -----------------
+
+            > A virgin doesn't come for free
+
+            If you want to reserve a virgin in heaven, you have to do
+            some crazy stuff on earth.
+
+                def do_good
+                  puts 'help people'
+                end
+
+            * _Will go to Heaven:_ Probably
+            * _Will go to Hell:_ Probably not
+          NOTE
+        }
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = "hello"
         end
