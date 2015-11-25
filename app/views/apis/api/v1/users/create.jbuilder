@@ -1,1 +1,1 @@
-json.message "作ったよ！"
+json.auth_token @token

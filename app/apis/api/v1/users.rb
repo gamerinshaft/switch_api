@@ -53,8 +53,8 @@ module API
           use :attributes
         end
         post '/', jbuilder: 'api/v1/users/create' do
-          user = User.new()
-          user.save()
+          user = save_object(User.new())
+          @token = user.auth_tokens.new_token
         end
       end
 
