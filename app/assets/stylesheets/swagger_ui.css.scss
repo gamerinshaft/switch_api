@@ -1,0 +1,66 @@
+html, body#swagger{
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  #header{
+    background-color: #0f6ab4;
+    box-sizing: content-box;
+    box-shadow: 0px 1px 10px 1px #ABA3A3;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    .swagger-ui-wrap{
+      position: relative;
+      height: 40px;
+      #logo{
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        font-size: 24px;
+        text-shadow: 1px 1px 1px #797EC1;
+        top: 2px;
+        bottom: 2px;
+        position: absolute;
+      }
+      #api_selector{
+        display: inline-block;
+        position: absolute;
+        right: 0px;
+        top: 6px;
+        bottom: 6px;
+        .input{
+          display: inline-block;
+          margin: 0;
+          input{
+            padding: 4px;
+            border: solid 1px #ddd;
+            border-radius: 2px;
+            font-size: 14px;
+          }
+          a#explore{
+            text-decoration: none;
+            color: white;
+            background-color: rgba(255,255,255,0.2);
+            padding: 4px;
+            box-sizing: border-box;
+            border-radius: 2px;
+            font-size: 13px;
+            position: relative;
+            display: block;
+            top: -1px;
+          }
+          &:first-child{
+            input{
+              width: 280px;
+            }
+          }
+        }
+      }
+    }
+  }
+  #swagger-ui-container{
+    padding-top: 40px;
+  }
+}

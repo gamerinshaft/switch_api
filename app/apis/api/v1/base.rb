@@ -32,7 +32,7 @@ module API
       end
 
       mount V1::Users
-      add_swagger_documentation :format => :json, :api_version => 'v1', :hide_documentation_path => false
+      add_swagger_documentation :format => :json, :api_version => 'v1', :hide_documentation_path => true
     end
   end
 end
