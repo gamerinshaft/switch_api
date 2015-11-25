@@ -67,12 +67,250 @@ html, body#swagger{
     #resources_container{
       position: relative;
       box-sizing: border-box;
-      background-color: white;
-      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
       -moz-animation: slideIn 0.7s ease 0s 1 alternate;
       -webkit-animation: slideIn 0.7s ease 0s 1 alternate;
       -o-animation: slideIn 0.7s ease 0s 1 alternate;
       -ms-animation: slideIn 0.7s ease 0s 1 alternate;
+      ul#resources{
+        list-style: none;
+        padding: 0px;
+        li.resource{
+          box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
+          background-color: white;
+          margin-bottom: 16px;
+          & > .heading{
+            background-color: #0F6AB4;
+            position: relative;
+            padding: 14px 24px;
+            h2{
+              margin: 0px;
+              display: inline-block;
+              color: rgba(255, 255, 255, 0.72);
+              font-size: 14px;
+              -webkit-font-smoothing: antialiased;
+              a{
+                color: white;
+                font-size: 24px;
+                text-decoration: none;
+              }
+            }
+            ul.options{
+              position: absolute;
+              right: 0px;
+              top: 0px;
+              list-style: none;
+              padding: none;
+              & > li{
+                display: none;
+              }
+              & > li:first-child{
+                display: block;
+                padding: 2px;
+                margin: 18px;
+                border-radius: 2px;
+                background-color: rgb(85, 155, 216);
+                box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.58) inset;
+                a{
+                  color: white;
+                  text-decoration: none;
+                  font-size: 12px;
+                  padding: 4px;
+                }
+              }
+            }
+          }
+          & > ul {
+            list-style: none;
+            padding: 0px;
+            ul.operations {
+              list-style: none;
+              padding: 0px;
+              & > .get.operation{
+                h3 {
+                  background-color: rgb(231,240,247);
+                  .http_method{
+                    background-color: #009BB4;
+                  }
+                  .path:before{
+                    color: darkblue;
+                  }
+                  a{
+                    color: darkblue;
+                  }
+                }
+              }
+              & > .post.operation{
+                h3 {
+                  background-color: rgb(231,246,236);
+                  .http_method{
+                    background-color: rgb(26,164,74);
+                  }
+                  .path:before{
+                    color: green;
+                  }
+                  a{
+                    color: green;
+                  }
+                }
+              }
+              & > .put.operation{
+                h3 {
+                  background-color: rgb(249,242,233);
+                  .http_method{
+                    background-color: rgb(199,132,40);
+                  }
+                  .path:before{
+                    color: brown;
+                  }
+                  a{
+                    color: brown;
+                  }
+                }
+              }
+              & > .delete.operation{
+                h3 {
+                  background-color: rgb(245,232,232);
+                  .http_method{
+                    background-color: rgb(165,26,31);
+                  }
+                  .path:before{
+                    color: darkred;
+                  }
+                  a{
+                    color: darkred;
+                  }
+                }
+              }
+              .operation {
+                position: relative;
+                .heading{
+                  h3 {
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    padding: 0px;
+                    padding-right: 9px;
+                    margin: 0px;
+                    border-radius: 0px;
+                    font-size: 10px;
+                    .http_method{
+                      display: inline-block;
+                      padding: 2px 0px;
+                      border-radius: 0px;
+                      width: 40px;
+                      text-align: center;
+                      box-sizing: border-box;
+                      a{
+                        color: white;
+                        text-decoration: none;
+                        -webkit-font-smoothing: antialiased;
+                      }
+                    }
+                    .path:before{
+                      content: "->";
+                      display: inline-block;
+                      margin: 0px 2px;
+                      margin-left: 4px;
+                    }
+                    a{
+                      text-decoration: none;
+                    }
+                  }
+                  .options {
+                    list-style: none;
+                    padding: 0px;
+                    li {
+                      border-bottom: 1px solid #ddd;
+                      padding: 10px 41px;
+                      padding-top: 28px;
+                      a {
+                        font-size: 18px;
+                        text-decoration: none;
+                        color: #666;
+                        input{
+                          border: solid 1px #ddd;
+                          border-radius: 2px;
+                          padding: 4px 8px;
+                          color: #555;
+                          font-size: 15px;
+                          -webkit-font-smoothing: antialiased;
+                          background-color: rgba(221, 221, 221, 0.24);
+                          outline: none;
+                        }
+                        span{
+                          color: #888;
+                          -webkit-font-smoothing: antialiased;
+                          font-size: 12px;
+                          margin-left: 13px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              .content{
+                  border-bottom: solid 1px #ddd;
+                  h1{
+                    font-size: 18px;
+                    color: #46a6c3;
+                    padding: 6px 16px;
+                    border: 1px solid #46a6c3;
+                    border-left: 7px solid #46a6c3;
+                    margin-top: 18px;
+                    margin-bottom: 16px;
+                  }
+                  p {
+                    font-size: 14px;
+                    line-height: 1.4;
+                    word-wrap: break-word;
+                    color: #555;
+                  }
+                  input.submit{
+                    margin-bottom: 24px;
+                  }
+                  pre {
+                    background-color: #F1F1F1;
+                    padding: 8px;
+                    border-radius: 2px;
+                    margin-top: 4px;
+                  }
+                  a.response_hider{
+                    text-decoration: none;
+                    font-size: 11px;
+                    border: solid 1px rgb(202, 202, 202);
+                    padding: 3px 8px;
+                    border-radius: 4px;
+                    color: black;
+                  }
+                  h4{
+                    margin: 0px;
+                  }
+                  & > * {
+                    margin: 0px 40px;
+                  }
+                  & > *:nth-child(2) {
+                    margin-top: 24px;
+                  }
+                  & > h4:first-child{
+                    margin: 0px;
+                    padding: 0px;
+                    border-bottom: 1px dashed #ddd;
+                    -webkit-font-smoothing: antialiased;
+                    padding: 0px 8px;
+                    font-size: 10px;
+                    color: #666;
+                  }
+                  .response{
+                    margin-bottom: 24px;
+                    h4{
+                      margin-top: 0px;
+                    }
+                  }
+                }
+            }
+          }
+        }
+      }
     }
 
   }

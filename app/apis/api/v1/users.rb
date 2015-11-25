@@ -27,6 +27,33 @@ module API
         end
       end
       resource :users do
+        desc '<input value="/api/v1/users/hello"><span>確認用のテストAPI</span>', {
+          notes: <<-NOTE
+            <h1>helloと返すAPI</h1>
+            <p>
+            このURLにアクセスするとHelloを返してくれます。<br>
+            実際にリクエストできてるか確認するためのAPIです。
+            </p>
+          NOTE
+        }
+        get '/hello', jbuilder: 'api/v1/users/hello' do
+          @hoge = 'hello'
+        end
+        desc '<input value="/api/v1/users"><span>ユーザー作成</span>', {
+          notes: <<-NOTE
+            <h1>Userを作成するAPI</h1>
+            <p>
+            このURLにアクセスするとUserを作るよ。
+            </p>
+          NOTE
+        }
+        post '/', jbuilder: 'api/v1/users/create' do
+          user = save_object(User.new())
+          @token = user.auth_tokens.new_token
+        end
+      end
+
+      resource :devices do
         desc 'GET /api/v1/users/hello', {
           notes: <<-NOTE
             <h1>helloと返すAPI</h1>
@@ -40,24 +67,7 @@ module API
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = 'hello'
         end
-        desc 'POST /api/v1/users', {
-          notes: <<-NOTE
-            <h1>Userを作成するAPI</h1>
-            <hr>
-            <p>
-            このURLにアクセスするとUserを作るよ。
-            </p>
-          NOTE
-        }
-        params do
-          use :attributes
-        end
-        post '/', jbuilder: 'api/v1/users/create' do
-          user = save_object(User.new())
-          @token = user.auth_tokens.new_token
-        end
       end
-
       #   resource :message_boards do
       #     desc 'GET /api/v1/message_boards'
       #     get '/', jbuilder: 'api/v1/message_boards/index' do

@@ -47,3 +47,11 @@
 
     #message-bar.swagger-ui-wrap &nbsp;
     #swagger-ui-container.swagger-ui-wrap
+:javascript
+  $(function(){
+    $(".toggleOperation input").on("focus", function(e){
+      console.log("wa");
+      e.preventDefault();
+      e.stopPropagation();
+    })
+  })
