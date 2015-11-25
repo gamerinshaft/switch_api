@@ -54,7 +54,7 @@ module API
       end
 
       resource :devices do
-        desc 'GET /api/v1/users/hello', {
+        desc '<input value="/api/v1/users/hello"><span>ユーザー作成</span>', {
           notes: <<-NOTE
             <h1>helloと返すAPI</h1>
             <hr>

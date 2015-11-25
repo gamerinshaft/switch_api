@@ -1,8 +1,7 @@
 !!!
 %html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => I18n.locale.to_s, "xml:lang" => I18n.locale.to_s }
   %head
-    %title Swagger UI
-
+    %title API doc
     = javascript_include_tag :swagger_ui
     = stylesheet_link_tag :swagger_ui, :media => :all
     = csrf_meta_tags
@@ -47,11 +46,3 @@
 
     #message-bar.swagger-ui-wrap &nbsp;
     #swagger-ui-container.swagger-ui-wrap
-:javascript
-  $(function(){
-    $(".toggleOperation input").on("focus", function(e){
-      console.log("wa");
-      e.preventDefault();
-      e.stopPropagation();
-    })
-  })
