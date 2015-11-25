@@ -34,7 +34,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use
 gem 'grape'
-gem  'grape-jbuilder'
+gem 'grape-jbuilder'
+gem 'grape-swagger'
+gem 'grape-swagger-ui'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
