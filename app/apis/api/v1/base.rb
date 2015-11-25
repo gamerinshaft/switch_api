@@ -31,7 +31,7 @@ module API
         end
       end
 
-      mount V1::MessageBoards
+      mount V1::Users
     end
   end
 end

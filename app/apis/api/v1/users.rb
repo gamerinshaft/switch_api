@@ -1,8 +1,15 @@
-# app/apis/api/v1/message_boards.rb
+# app/apis/api/v1/users.rb
 
 module API
   module V1
-    class MessageBoards < Grape::API
+    class Users < Grape::API
+
+      resource :users do
+        desc 'GET /api/v1/users/hello'
+        get '/hello', jbuilder: 'api/v1/users/hello' do
+          @hoge = "hello"
+        end
+      end
     #   helpers do
     #     # Strong Parametersの設定
     #     def message_board_params
