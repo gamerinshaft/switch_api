@@ -29,9 +29,10 @@ module API
         params :token do
           requires :auth_token, type: String, desc: 'auth_token'
         end
+
       end
       resource :users do
-        desc '<input value="/api/v1/users/hello"><span>確認用のテストAPI</span>', notes: <<-NOTE
+        desc '確認用のテストAPI', notes: <<-NOTE
             <h1>helloと返すAPI</h1>
             <p>
             このURLにアクセスするとHelloを返してくれます。<br>
@@ -50,6 +51,54 @@ module API
         post '/', jbuilder: 'api/v1/users/create' do
           user = save_object(User.new)
           @token = user.auth_tokens.new_token
+        end
+
+        desc '<input value="/api/v1/users"><span>ユーザー削除</span>', notes: <<-NOTE
+            <h1>Userを削除します</h1>
+            <p>
+            このURLにアクセスするとUserを削除します
+            </p>
+          NOTE
+        params do
+          use :token
+          optional :password, type: String, desc: 'サインアップしている場合'
+        end
+        delete '/', jbuilder: 'api/v1/users/destroy' do
+          unless token = AuthToken.find_by(token: params[:auth_token])
+            error!( json:{
+                   errors: [
+                     {
+                         message: 'errors.messages.cant_find_token',
+                         code: ErrorCodes::INVALID_TOKEN
+                     }
+                   ]
+               }, status: 400
+            )
+            false
+          end
+
+          if info = token.user.info
+            if params[:password]
+              if check_password(info, params[:password])
+                user.destroy
+                @message = '退会しました。'
+              end
+            else
+              error!( json:{
+                   errors: [
+                     {
+                         message: 'errors.messages.need_a_password',
+                         code: ErrorCodes::NEED_A_PASSWORD
+                     }
+                   ]
+               }, status: 400
+              )
+              false
+            end
+          else
+            user.destroy
+            @message = '退会しました。'
+          end
         end
 
         resource :info do
@@ -77,18 +126,6 @@ module API
         end
       end
 
-      resource :devices do
-        desc '<input value="/api/v1/users/hello"><span>ユーザー作成</span>', notes: <<-NOTE
-            <h1>helloと返すAPI</h1>
-            <p>
-            このURLにアクセスするとHelloを返してくれます。<br>
-            実際にリクエストできてるか確認するためのAPIです。
-            </p>
-          NOTE
-        get '/hello', jbuilder: 'api/v1/users/hello' do
-          @hoge = user
-        end
-      end
       #   resource :message_boards do
       #     desc 'GET /api/v1/message_boards'
       #     get '/', jbuilder: 'api/v1/message_boards/index' do

@@ -22,6 +22,23 @@ module API
         end
       end
 
+      def check_password(user_info, raw_password)
+        if BCrypt::Password.new(user_info.hashed_password) == raw_password
+          true
+        else
+          error!(json:{
+                     errors:[
+                         {
+                             message: 'errors.messages.invalid_pin',
+                             code: ErrorCodes::INVALID_PIN
+                         }
+                     ]
+                 }, status: 400
+          )
+          false
+        end
+      end
+
       def user
         return @user if @user
         return nil unless (token = AuthToken.find_by(token: params[:auth_token]))
