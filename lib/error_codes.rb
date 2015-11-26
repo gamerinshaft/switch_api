@@ -19,4 +19,5 @@ module ErrorCodes
   NOT_FOUND               = 18
   TIMEOUT                 = 19
   ALREADY_EXISTING = 20
+  NEED_A_PASSWORD  = 21
 end
