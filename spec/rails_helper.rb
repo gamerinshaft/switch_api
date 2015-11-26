@@ -33,6 +33,12 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  # FactoryGirl.buildなどの呼び出しを、create, buildなどでメソッドが呼べる
+  config.include FactoryGirl::Syntax::Methods
+
+  # capybaraでvisit使おうとするとエラーが出るときに、下記を書く
+  config.include Capybara::DSL
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
