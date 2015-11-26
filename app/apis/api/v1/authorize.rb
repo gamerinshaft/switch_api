@@ -11,6 +11,18 @@ module API
         end
       end
       resource :auth do
+        desc 'トークンの取得', notes: <<-NOTE
+            <h1>アクセストークンを作成する</h1>
+            <p>
+            このURLにリクエストすることによって、アクセストークンを取得することができます。<br>
+            アクセストークンは基本的にどんなリクエストをする時でも必要なので、値をキャッシュするようにしてください。
+            </p>
+          NOTE
+        get '/token', jbuilder: 'api/v1/auth/token' do
+          user = save_object(User.new)
+          @token = user.auth_tokens.new_token
+        end
+
         desc '確認用のテストAPI', notes: <<-NOTE
             <h1>signup</h1>
             <p>
