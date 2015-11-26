@@ -182,29 +182,25 @@ html, body#swagger{
                 }
               }
               .operation {
-                position: relative;
                 .heading{
+                  position: relative;
                   h3 {
-                    // position: absolute;
-                    // left: 0px;
-                    // top: 0px;
-                    // padding: 0px;
-                    // padding-right: 9px;
+                    border-bottom: 1px solid #ddd;
                     margin: 0px;
                     position: relative;
-                    padding-left: 40px;
-                    // border-radius: 0px;
-                    // font-size: 10px;
+                    padding-left: 64px;
+                    height: 72px;
                     .http_method{
-                      font-size: 10px;
+                      font-size: 16px;
                       display: inline-block;
-                      padding: 2px 0px;
+                      box-sizing: border-box;
+                      padding: 24px 0px;
                       border-radius: 0px;
                       top: 0px;
                       bottom: 0px;
                       left: 0px;
                       position: absolute;
-                      width: 40px;
+                      width: 64px;
                       text-align: center;
                       box-sizing: border-box;
                       a{
@@ -213,12 +209,17 @@ html, body#swagger{
                         -webkit-font-smoothing: antialiased;
                       }
                     }
-                    // .path:before{
-                    //   content: "jbuilder ->";
-                    //   display: inline-block;
-                    //   margin: 0px 2px;
-                    //   margin-left: 4px;
-                    // }
+                    .path{
+                      a{
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        -webkit-font-smoothing: antialiased;
+                        font-size: 20px;
+                        padding: 21px;
+                        box-sizing: border-box;
+                      }
+                    }
                     a{
                       text-decoration: none;
                     }
@@ -226,30 +227,17 @@ html, body#swagger{
                   .options {
                     list-style: none;
                     padding: 0px;
+                    position: absolute;
+                    right: 16px;
+                    bottom: 2px;
                     li {
-                      border-bottom: 1px solid #ddd;
-                      padding: 10px 41px;
-                      padding-top: 28px;
                       a {
                         font-size: 18px;
                         text-decoration: none;
-                        color: #666;
-                        input{
-                          border: solid 1px #ddd;
-                          border-radius: 2px;
-                          padding: 4px 8px;
-                          color: #555;
-                          font-size: 15px;
-                          -webkit-font-smoothing: antialiased;
-                          background-color: rgba(221, 221, 221, 0.24);
-                          outline: none;
-                        }
-                        span{
-                          color: #888;
-                          -webkit-font-smoothing: antialiased;
-                          font-size: 12px;
-                          margin-left: 13px;
-                        }
+                        color: #888;
+                        -webkit-font-smoothing: antialiased;
+                        font-size: 12px;
+                        margin-left: 13px;
                       }
                     }
                   }
@@ -338,6 +326,7 @@ html, body#swagger{
                     margin-top: 24px;
                   }
                   & > h4:first-child{
+                    display: none;
                     margin: 0px;
                     padding: 0px;
                     border-bottom: 1px dashed #ddd;

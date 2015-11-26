@@ -11,7 +11,7 @@ module API
         end
       end
       resource :auth do
-        desc '<input value="/api/v1/auth/signup"><span>確認用のテストAPI</span>', notes: <<-NOTE
+        desc '確認用のテストAPI', notes: <<-NOTE
             <h1>signup</h1>
             <p>
             User登録をします。<br>

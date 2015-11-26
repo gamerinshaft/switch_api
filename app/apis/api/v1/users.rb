@@ -42,7 +42,7 @@ module API
         get '/hello', jbuilder: 'api/v1/users/hello' do
           @hoge = 'hello'
         end
-        desc '<input value="/api/v1/users"><span>ユーザー作成</span>', notes: <<-NOTE
+        desc 'ユーザー作成', notes: <<-NOTE
             <h1>Userを作成するAPI</h1>
             <p>
             このURLにアクセスするとUserを作るよ。
@@ -53,7 +53,7 @@ module API
           @token = user.auth_tokens.new_token
         end
 
-        desc '<input value="/api/v1/users"><span>ユーザー削除</span>', notes: <<-NOTE
+        desc 'ユーザー削除', notes: <<-NOTE
             <h1>Userを削除します</h1>
             <p>
             このURLにアクセスするとUserを削除します
@@ -102,7 +102,7 @@ module API
         end
 
         resource :info do
-          desc '<input value="/api/v1/users/hello"><span>ユーザー情報の表示</span>', notes: <<-NOTE
+          desc 'ユーザー情報の表示', notes: <<-NOTE
               <h1>helloと返すAPI</h1>
               <p>
               このURLにアクセスするとHelloを返してくれます。<br>
