@@ -15,5 +15,13 @@ describe "Authorize" do
     it 'response is not nil' do
       expect(@json["response"]).not_to be_empty
     end
+
+    it 'correct data type' do
+      expect(String === @json["response"]["auth_token"]).to be true
+    end
+
+    it 'correct token size' do
+      expect(@json["response"]["auth_token"].size).to eq 22
+    end
   end
 end
