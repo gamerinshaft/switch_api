@@ -35,14 +35,14 @@
   %body#swagger
     #header
       .swagger-ui-wrap
-        %a#logo{ href: "http://localhost:3000" } Shampoo
+        %a#logo{ href: "#{request.protocol}#{request.raw_host_with_port}" } Switch
         %form#api_selector
           .input
-            %input#input_baseUrl{ value: "http://localhost:3000/api/v1/swagger_doc", name: "baseUrl", type: "text" }
+            %input#input_baseUrl{ value: "#{request.protocol}#{request.raw_host_with_port}/api/v1/swagger_doc", name: "baseUrl", type: "text" }
           .input
             %input#input_apiKey{ placeholder: "api_key", name: "apiKey", type: "text" }
           .input
-            %a#explore{ href: "#"} Explore
+            %a#explore{ href: "#"} 表示する
 
     #message-bar.swagger-ui-wrap &nbsp;
     #swagger-ui-container.swagger-ui-wrap
