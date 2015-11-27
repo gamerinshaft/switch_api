@@ -37,14 +37,13 @@ gem 'grape-jbuilder'
 gem 'grape-swagger'
 gem 'grape-swagger-ui'
 gem 'haml-rails'
-
+gem 'rubocop', group: :development
 group :development, :test do
   gem 'byebug'
 
   gem 'web-console', '~> 2.0'
 
   gem 'spring'
-  gem 'rubocop'
   gem 'rails-erd'
   gem 'pry-rails'
   gem 'pry-doc'
