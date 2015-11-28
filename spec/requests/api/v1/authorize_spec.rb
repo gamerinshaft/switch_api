@@ -23,5 +23,9 @@ describe "Authorize" do
     it 'correct token size' do
       expect(@json["response"]["auth_token"].size).to eq 22
     end
+
+    it 'include correct word' do
+      expect(@json["meta"]["message"]).to include("を作成しました")
+    end
   end
 end
