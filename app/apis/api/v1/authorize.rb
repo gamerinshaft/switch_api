@@ -47,8 +47,8 @@ module API
                 screen_name:     params[:screen_name],
                 password:        params[:password]
               )
-              save_object(user_info)
-              @hoge = token
+              obj = save_object(user_info)
+              @screen_name = obj.screen_name
             end
           end
         end
