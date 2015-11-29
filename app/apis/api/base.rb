@@ -14,11 +14,10 @@ module API
               code: ErrorCodes::FAIL_SAVE
             }
           end
-          error!(json: {
-                   errors: errors
-                 }, status: 400
-                )
-          false
+          error!(meta: {
+             status: 400,
+             errors: errors
+           }, response:{ })
         end
       end
 
