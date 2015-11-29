@@ -37,7 +37,7 @@ module API
             error!(meta: {
                      status: 400,
                      errors: [
-                       message: ('errors.messages.cant_find_token'),
+                       message: ('errors.messages.invalid_token'),
                        code: ErrorCodes::INVALID_TOKEN
                      ]
                    }, response: {})
