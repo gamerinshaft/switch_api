@@ -25,24 +25,31 @@ module API
         if BCrypt::Password.new(user_info.hashed_password) == raw_password
           true
         else
-          error!(json: {
-                   errors: [
-                     {
-                       message: 'errors.messages.invalid_pin',
+          error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_pin'),
                        code: ErrorCodes::INVALID_PIN
-                     }
-                   ]
-                 }, status: 400
-                )
+                     ]
+                   }, response: {})
           false
         end
       end
 
       def user
         return @user if @user
-        return nil unless (token = AuthToken.find_by(token: params[:auth_token]))
-        update_auth_token token
-        @user = token.user
+        if (token = AuthToken.find_by(token: params[:auth_token]))
+          update_auth_token token
+          @user = token.user
+        else
+          error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_auth_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+        end
       end
 
       def update_auth_token(token)
@@ -56,15 +63,13 @@ module API
 
       def authenticate_user!
         unless user_signed_in?
-          error!(json: {
-                   errors: [
-                     {
-                       message: t('errors.messages.invalid_auth_token'),
+          error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_auth_token'),
                        code: ErrorCodes::INVALID_TOKEN
-                     }
-                   ]
-                 }, status: 400
-                )
+                     ]
+                   }, response: {})
         end
       end
     end

@@ -26,21 +26,6 @@ module API
                    }, response: {})
           end
         end
-
-        def check_password(user_info, raw_password)
-          if BCrypt::Password.new(user_info.hashed_password) == raw_password
-            true
-          else
-            error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.invalid_pin'),
-                       code: ErrorCodes::INVALID_PIN
-                     ]
-                   }, response: {})
-            false
-          end
-        end
       end
       resource :auth do
         desc 'トークンの取得', notes: <<-NOTE
