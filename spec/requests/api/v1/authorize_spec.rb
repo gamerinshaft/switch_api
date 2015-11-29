@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Authorize" do
-  describe "GET /api/v1/auth/token"do
+  describe "GET /api/v1/auth/token" do
     before(:all) do
       get "/api/v1/auth/token"
       @json = JSON.parse(response.body)
@@ -22,6 +22,23 @@ describe "Authorize" do
 
     it 'correct token size' do
       expect(@json["response"]["auth_token"].size).to eq 22
+    end
+
+    it 'include correct word' do
+      expect(@json["meta"]["message"]).to include("を作成しました")
+    end
+  end
+
+  describe "POST /api/v1/auth/signup" do
+    before(:all) do
+      token = create(:auth_token)
+      user = token.user
+      attributes = attributes_for(:user_info)
+      attributes.store(:auth_token, token.token)
+      post "/api/v1/auth/signup", attributes
+    end
+    it 'test' do
+      expect(1+1).to be 2
     end
   end
 end

@@ -38,6 +38,7 @@ gem 'grape-swagger'
 gem 'grape-swagger-ui'
 gem 'haml-rails'
 gem 'rubocop', group: :development
+
 group :development, :test do
   gem 'byebug'
 
@@ -56,5 +57,6 @@ group :development, :test do
   gem 'annotate'
   gem 'json_expressions'
   gem 'rspec-rails', '~> 3.0.0'
+  gem 'factory_girl_rails'
 end
 
