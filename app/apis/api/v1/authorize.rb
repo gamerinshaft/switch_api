@@ -36,7 +36,7 @@ module API
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if !user.info.nil?
               error!(meta: {
-                       status: 500,
+                       status: 400,
                        errors: [
                          message: ('errors.messages.already_existing'),
                          code: ErrorCodes::ALREADY_EXISTING

@@ -60,7 +60,7 @@ describe 'Authorize' do
         @json = JSON.parse(response.body)
       end
       it 'return 500 status' do
-        expect(response.status).to be 500
+        expect(@json['meta']['status']).to be 400
       end
       it 'correct code' do
         expect(@json['meta']['errors'][0]["code"]).to be ErrorCodes::ALREADY_EXISTING
