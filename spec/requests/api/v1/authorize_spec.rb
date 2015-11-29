@@ -15,15 +15,12 @@ describe 'Authorize' do
     it 'response is not nil' do
       expect(@json['response']).not_to be_empty
     end
-
     it 'correct data type' do
       expect(String === @json['response']['auth_token']).to be true
     end
-
     it 'correct token size' do
       expect(@json['response']['auth_token'].size).to eq 22
     end
-
     it 'include correct word' do
       expect(@json['meta']['message']).to include('を作成しました')
     end
@@ -36,9 +33,25 @@ describe 'Authorize' do
       attributes = attributes_for(:user_info)
       attributes.store(:auth_token, token.token)
       post '/api/v1/auth/signup', attributes
+      @json = JSON.parse(response.body)
     end
-    it 'test' do
-      expect(1 + 1).to be 2
+    it 'return 201 status' do
+      expect(response.status).to be 201
+    end
+    it 'meta code is same status' do
+      expect(@json['meta']['code']).to be 201
+    end
+    it 'response is not nil' do
+      expect(@json['response']).not_to be_empty
+    end
+    it 'correct data type' do
+      expect(String === @json['response']['auth_token']).to be true
+    end
+    it 'correct token size' do
+      expect(@json['response']['auth_token'].size).to eq 22
+    end
+    it 'include correct word' do
+      expect(@json['meta']['message']).to include('を登録しました')
     end
   end
 end
