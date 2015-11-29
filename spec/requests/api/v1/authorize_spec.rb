@@ -63,7 +63,7 @@ describe 'Authorize' do
         expect(@json['meta']['status']).to be 400
       end
       it 'correct code' do
-        expect(@json['meta']['errors'][0]["code"]).to be ErrorCodes::ALREADY_EXISTING
+        expect(@json['meta']['errors'][0]['code']).to be ErrorCodes::ALREADY_EXISTING
       end
     end
   end
