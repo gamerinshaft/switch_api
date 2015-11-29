@@ -26,12 +26,12 @@ module API
           true
         else
           error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.invalid_pin'),
-                       code: ErrorCodes::INVALID_PIN
-                     ]
-                   }, response: {})
+                   status: 400,
+                   errors: [
+                     message: ('errors.messages.invalid_pin'),
+                     code: ErrorCodes::INVALID_PIN
+                   ]
+                 }, response: {})
           false
         end
       end
@@ -43,12 +43,12 @@ module API
           @user = token.user
         else
           error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.invalid_auth_token'),
-                       code: ErrorCodes::INVALID_TOKEN
-                     ]
-                   }, response: {})
+                   status: 400,
+                   errors: [
+                     message: ('errors.messages.invalid_auth_token'),
+                     code: ErrorCodes::INVALID_TOKEN
+                   ]
+                 }, response: {})
         end
       end
 
@@ -64,12 +64,12 @@ module API
       def authenticate_user!
         unless user_signed_in?
           error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.invalid_auth_token'),
-                       code: ErrorCodes::INVALID_TOKEN
-                     ]
-                   }, response: {})
+                   status: 400,
+                   errors: [
+                     message: ('errors.messages.invalid_auth_token'),
+                     code: ErrorCodes::INVALID_TOKEN
+                   ]
+                 }, response: {})
         end
       end
     end

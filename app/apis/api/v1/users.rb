@@ -34,7 +34,7 @@ module API
         end
         delete '/', jbuilder: 'api/v1/user/destroy' do
           unless token = AuthToken.find_by(token: params[:auth_token])
-             error!(meta: {
+            error!(meta: {
                      status: 400,
                      errors: [
                        message: ('errors.messages.cant_find_token'),
@@ -52,12 +52,12 @@ module API
               end
             else
               error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.need_a_password'),
-                       code: ErrorCodes::NEED_A_PASSWORD
-                     ]
-                   }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.need_a_password'),
+                         code: ErrorCodes::NEED_A_PASSWORD
+                       ]
+                     }, response: {})
               false
             end
           else
@@ -78,12 +78,12 @@ module API
           get '/', jbuilder: 'api/v1/user/info/show' do
             if user.info.nil?
               error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.not_create_info'),
-                       code: ErrorCodes::NOT_FOUND
-                     ]
-                   }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.not_create_info'),
+                         code: ErrorCodes::NOT_FOUND
+                       ]
+                     }, response: {})
               false
             end
             @info = user.info
