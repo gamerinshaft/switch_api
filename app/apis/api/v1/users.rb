@@ -29,7 +29,6 @@ module API
         params :token do
           requires :auth_token, type: String, desc: 'auth_token'
         end
-
       end
       resource :users do
         desc '確認用のテストAPI', notes: <<-NOTE
@@ -65,15 +64,15 @@ module API
         end
         delete '/', jbuilder: 'api/v1/users/destroy' do
           unless token = AuthToken.find_by(token: params[:auth_token])
-            error!( json:{
-                   errors: [
-                     {
+            error!(json: {
+                     errors: [
+                       {
                          message: 'errors.messages.cant_find_token',
                          code: ErrorCodes::INVALID_TOKEN
-                     }
-                   ]
-               }, status: 400
-            )
+                       }
+                     ]
+                   }, status: 400
+                  )
             false
           end
 
@@ -84,15 +83,15 @@ module API
                 @message = '退会しました。'
               end
             else
-              error!( json:{
-                   errors: [
-                     {
-                         message: 'errors.messages.need_a_password',
-                         code: ErrorCodes::NEED_A_PASSWORD
-                     }
-                   ]
-               }, status: 400
-              )
+              error!(json: {
+                       errors: [
+                         {
+                           message: 'errors.messages.need_a_password',
+                           code: ErrorCodes::NEED_A_PASSWORD
+                         }
+                       ]
+                     }, status: 400
+                    )
               false
             end
           else

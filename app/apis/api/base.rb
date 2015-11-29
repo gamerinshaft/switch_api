@@ -26,15 +26,15 @@ module API
         if BCrypt::Password.new(user_info.hashed_password) == raw_password
           true
         else
-          error!(json:{
-                     errors:[
-                         {
-                             message: 'errors.messages.invalid_pin',
-                             code: ErrorCodes::INVALID_PIN
-                         }
-                     ]
+          error!(json: {
+                   errors: [
+                     {
+                       message: 'errors.messages.invalid_pin',
+                       code: ErrorCodes::INVALID_PIN
+                     }
+                   ]
                  }, status: 400
-          )
+                )
           false
         end
       end
