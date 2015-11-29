@@ -2,12 +2,43 @@ module API
   module V1
     class Authorize < Grape::API
       helpers do
-        params :attributes do
+        params :signup_params do
           requires :screen_name, type: String, desc: '表示名'
           requires :email, type: String, desc: 'メールアドレス'
           requires :password, type: String, desc: 'パスワード'
           requires :auth_token, type: String, desc: 'トークン'
           # optional :body, type: String, desc: "MessageBoard body."
+        end
+        params :login_params do
+          requires :email_or_screen_name, type: String, desc: 'メールアドレスまたは名前'
+          requires :password, type: String, desc: 'パスワード'
+        end
+        def find_user_by_identifier(identifier)
+          if(user_info = UserInfo.find_by(screen_name: identifier) || UserInfo.find_by(email: identifier))
+            user_info.user
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.user_not_found'),
+                 code: ErrorCodes::NOT_FOUND_USER
+               ]
+             }, response:{ })
+          end
+        end
+        def check_password(user_info, raw_password)
+          if BCrypt::Password.new(user_info.hashed_password) == raw_password
+            true
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_pin'),
+                 code: ErrorCodes::INVALID_PIN
+               ]
+             }, response:{ })
+            false
+          end
         end
       end
       resource :auth do
@@ -23,14 +54,14 @@ module API
           @token = user.auth_tokens.new_token
         end
 
-        desc '確認用のテストAPI', notes: <<-NOTE
+        desc 'User登録用API', notes: <<-NOTE
             <h1>signup</h1>
             <p>
             User登録をします。<br>
             </p>
           NOTE
         params do
-          use :attributes
+          use :signup_params
         end
         post '/signup', jbuilder: 'api/v1/auth/signup' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
@@ -52,6 +83,22 @@ module API
               @screen_name = obj.screen_name
               @token = token.token
             end
+          end
+        end
+
+        desc 'ログイン用API', notes: <<-NOTE
+            <h1>signup</h1>
+            <p>
+            emailまたはスクリーンネームを用いてログインします。<br>
+            </p>
+          NOTE
+        params do
+          use :login_params
+        end
+        post '/login', jbuilder: 'api/v1/auth/login' do
+          user = find_user_by_identifier(params[:email_or_screen_name])
+          if check_password(user.info, params[:password])
+            @token = user.auth_tokens.new_token
           end
         end
       end
