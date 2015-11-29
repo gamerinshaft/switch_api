@@ -1,5 +1,4 @@
 require 'rails_helper'
-
 describe 'Authorize' do
   describe 'GET /api/v1/auth/token' do
     before(:all) do
