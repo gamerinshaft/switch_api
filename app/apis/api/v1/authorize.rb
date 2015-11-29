@@ -87,6 +87,40 @@ module API
             @token = user.auth_tokens.new_token
           end
         end
+
+        desc 'ログアウト用API', notes: <<-NOTE
+            <h1>logout</h1>
+            <p>
+            トークンを削除してログアウトします。ユーザー情報がまだ作成されてないトークンは削除できません。
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'トークン'
+        end
+        delete '/logout', jbuilder: 'api/v1/auth/logout' do
+          if(token = AuthToken.find_by(token: params[:auth_token]))
+            if token.user.info
+              token.destroy
+            else
+              error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.info_not_found'),
+                       code: ErrorCodes::NOT_FOUND_INFO
+                     ]
+                   }, response: {})
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+
       end
     end
   end
