@@ -16,7 +16,8 @@ module API
         get '/commands/blink', jbuilder: 'api/v1/raspberry/commands/blink' do
           if(token = AuthToken.find_by(token: params[:auth_token]))
             if token.user.info
-
+              path = File.join(Rails.root.instance_values["path"], "commands/blink.sh")
+              `sudo sh #{path}`
             else
               error!(meta: {
                      status: 400,
