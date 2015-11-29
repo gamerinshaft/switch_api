@@ -1,5 +1,5 @@
 json.meta do
-  json.code 201
+  json.status 201
   json.message "#{@screen_name}を登録しました"
 end
 json.response do

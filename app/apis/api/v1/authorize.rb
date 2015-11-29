@@ -35,12 +35,13 @@ module API
         post '/signup', jbuilder: 'api/v1/auth/signup' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if !user.info.nil?
-              error!(json: {
+              error!(meta: {
+                       status: 500,
                        errors: [
                          message: ('errors.messages.already_existing'),
                          code: ErrorCodes::ALREADY_EXISTING
                        ]
-                     }, status: 400)
+                     }, response:{ })
             else
               user_info = user.build_info(
                 email:           params[:email],
