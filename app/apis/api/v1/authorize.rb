@@ -14,29 +14,30 @@ module API
           requires :password, type: String, desc: 'パスワード'
         end
         def find_user_by_identifier(identifier)
-          if(user_info = UserInfo.find_by(screen_name: identifier) || UserInfo.find_by(email: identifier))
+          if (user_info = UserInfo.find_by(screen_name: identifier) || UserInfo.find_by(email: identifier))
             user_info.user
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.user_not_found'),
-                 code: ErrorCodes::NOT_FOUND_USER
-               ]
-             }, response:{ })
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.user_not_found'),
+                       code: ErrorCodes::NOT_FOUND_USER
+                     ]
+                   }, response: {})
           end
         end
+
         def check_password(user_info, raw_password)
           if BCrypt::Password.new(user_info.hashed_password) == raw_password
             true
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_pin'),
-                 code: ErrorCodes::INVALID_PIN
-               ]
-             }, response:{ })
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_pin'),
+                       code: ErrorCodes::INVALID_PIN
+                     ]
+                   }, response: {})
             false
           end
         end
@@ -72,7 +73,7 @@ module API
                          message: ('errors.messages.already_existing'),
                          code: ErrorCodes::ALREADY_EXISTING
                        ]
-                     }, response:{ })
+                     }, response: {})
             else
               user_info = user.build_info(
                 email:           params[:email],

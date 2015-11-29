@@ -15,9 +15,9 @@ module API
             }
           end
           error!(meta: {
-             status: 400,
-             errors: errors
-           }, response:{ })
+                   status: 400,
+                   errors: errors
+                 }, response: {})
         end
       end
 
