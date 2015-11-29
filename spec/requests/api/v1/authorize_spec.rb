@@ -31,7 +31,11 @@ describe "Authorize" do
 
   describe "POST /api/v1/auth/signup" do
     before(:all) do
-      user = create(:user)
+      token = create(:auth_token)
+      user = token.user
+      attributes = attributes_for(:user_info)
+      attributes.store(:auth_token, token.token)
+      post "/api/v1/auth/signup", attributes
       binding.pry
     end
     it 'test' do

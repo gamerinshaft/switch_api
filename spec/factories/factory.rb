@@ -6,4 +6,11 @@ FactoryGirl.define do
     user
     token "hoehoge"
   end
+  factory :user_info do
+    user
+    name "random"
+    email "random@gmail.com"
+    screen_name "random"
+    password "random"
+  end
 end
