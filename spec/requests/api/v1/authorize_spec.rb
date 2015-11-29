@@ -36,7 +36,6 @@ describe "Authorize" do
       attributes = attributes_for(:user_info)
       attributes.store(:auth_token, token.token)
       post "/api/v1/auth/signup", attributes
-      binding.pry
     end
     it 'test' do
       expect(1+1).to be 2
