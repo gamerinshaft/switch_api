@@ -49,6 +49,7 @@ module API
               )
               obj = save_object(user_info)
               @screen_name = obj.screen_name
+              @token = token.token
             end
           end
         end
