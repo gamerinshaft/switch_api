@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202225038) do
+ActiveRecord::Schema.define(version: 20151202232602) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 20151202225038) do
   end
 
   add_index "infrareds", ["user_id"], name: "index_infrareds_on_user_id"
+
+  create_table "tasks", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "tasks", ["user_id"], name: "index_tasks_on_user_id"
 
   create_table "user_infos", force: :cascade do |t|
     t.string   "screen_name"
