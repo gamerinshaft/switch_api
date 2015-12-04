@@ -1,6 +1,6 @@
 class InfraredGroup < ActiveRecord::Base
   belongs_to :user
-  has_many :task_infrareds
-  has_many :infrareds, through: :task_infrareds
+  has_many :infrared_relationals
+  has_many :infrareds, through: :infrared_relationals
   belongs_to :log
 end
