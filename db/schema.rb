@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151204133102) do
+ActiveRecord::Schema.define(version: 20151204133422) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(version: 20151204133102) do
 
   add_index "infrared_groups", ["log_id"], name: "index_infrared_groups_on_log_id"
   add_index "infrared_groups", ["user_id"], name: "index_infrared_groups_on_user_id"
+
+  create_table "infrared_relationals", force: :cascade do |t|
+    t.integer  "infrared_id"
+    t.integer  "infrared_group_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "infrared_relationals", ["infrared_group_id"], name: "index_infrared_relationals_on_infrared_group_id"
+  add_index "infrared_relationals", ["infrared_id"], name: "index_infrared_relationals_on_infrared_id"
 
   create_table "infrareds", force: :cascade do |t|
     t.string   "name"
