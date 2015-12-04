@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151203040210) do
+ActiveRecord::Schema.define(version: 20151204133422) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -21,6 +21,27 @@ ActiveRecord::Schema.define(version: 20151203040210) do
   end
 
   add_index "auth_tokens", ["user_id"], name: "index_auth_tokens_on_user_id"
+
+  create_table "infrared_groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.integer  "log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "infrared_groups", ["log_id"], name: "index_infrared_groups_on_log_id"
+  add_index "infrared_groups", ["user_id"], name: "index_infrared_groups_on_user_id"
+
+  create_table "infrared_relationals", force: :cascade do |t|
+    t.integer  "infrared_id"
+    t.integer  "infrared_group_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "infrared_relationals", ["infrared_group_id"], name: "index_infrared_relationals_on_infrared_group_id"
+  add_index "infrared_relationals", ["infrared_id"], name: "index_infrared_relationals_on_infrared_id"
 
   create_table "infrareds", force: :cascade do |t|
     t.string   "name"
@@ -41,27 +62,6 @@ ActiveRecord::Schema.define(version: 20151203040210) do
   end
 
   add_index "logs", ["user_id"], name: "index_logs_on_user_id"
-
-  create_table "task_infrareds", force: :cascade do |t|
-    t.integer  "task_id"
-    t.integer  "infrared_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "task_infrareds", ["infrared_id"], name: "index_task_infrareds_on_infrared_id"
-  add_index "task_infrareds", ["task_id"], name: "index_task_infrareds_on_task_id"
-
-  create_table "tasks", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer  "log_id"
-  end
-
-  add_index "tasks", ["log_id"], name: "index_tasks_on_log_id"
-  add_index "tasks", ["user_id"], name: "index_tasks_on_user_id"
 
   create_table "user_infos", force: :cascade do |t|
     t.string   "screen_name"
