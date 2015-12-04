@@ -37,6 +37,7 @@ gem 'grape-jbuilder'
 gem 'grape-swagger'
 gem 'grape-swagger-ui'
 gem 'haml-rails'
+gem 'wiringpi2'
 gem 'rubocop', group: :development
 
 group :development, :test do
