@@ -14,18 +14,18 @@ module API
           requires :auth_token, type: String, desc: 'Auth token.'
         end
         get '/commands/blink', jbuilder: 'api/v1/raspberry/commands/blink' do
-          if(token = AuthToken.find_by(token: params[:auth_token]))
+          if (token = AuthToken.find_by(token: params[:auth_token]))
             if token.user.info
-              path = File.join(Rails.root.to_s + "commands/blink.sh")
+              path = File.join(Rails.root.to_s + 'commands/blink.sh')
               `sudo sh #{path}`
             else
               error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.info_not_found'),
-                       code: ErrorCodes::NOT_FOUND_INFO
-                     ]
-                   }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.info_not_found'),
+                         code: ErrorCodes::NOT_FOUND_INFO
+                       ]
+                     }, response: {})
               false
             end
           else

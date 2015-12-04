@@ -98,17 +98,17 @@ module API
           requires :auth_token, type: String, desc: 'トークン'
         end
         delete '/logout', jbuilder: 'api/v1/auth/logout' do
-          if(token = AuthToken.find_by(token: params[:auth_token]))
+          if (token = AuthToken.find_by(token: params[:auth_token]))
             if token.user.info
               token.destroy
             else
               error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.info_not_found'),
-                       code: ErrorCodes::NOT_FOUND_INFO
-                     ]
-                   }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.info_not_found'),
+                         code: ErrorCodes::NOT_FOUND_INFO
+                       ]
+                     }, response: {})
             end
           else
             error!(meta: {
@@ -120,7 +120,6 @@ module API
                    }, response: {})
           end
         end
-
       end
     end
   end

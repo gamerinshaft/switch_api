@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :infrared_group do
-    name "MyString"
+    name 'MyString'
   end
-
 end
