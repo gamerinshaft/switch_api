@@ -1,4 +1,5 @@
 # app/apis/api/v1/raspberry.rb
+require 'wiringpi'
 
 module API
   module V1
