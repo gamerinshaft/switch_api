@@ -1,5 +1,5 @@
 class Log < ActiveRecord::Base
   belongs_to :user
-  has_one :infrared_groups
-  has_one :infrareds
+  has_one :infrared_group
+  has_one :infrared
 end
