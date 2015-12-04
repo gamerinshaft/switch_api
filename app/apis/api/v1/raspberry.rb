@@ -16,8 +16,19 @@ module API
         get '/commands/blink', jbuilder: 'api/v1/raspberry/commands/blink' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if token.user.info
-              path = File.join(Rails.root.to_s + 'commands/blink.sh')
-              `sudo sh #{path}`
+              # path = File.join(Rails.root.to_s + 'commands/blink.sh')
+              # `sudo sh #{path}`
+              io = WiringPi::GPIO.new do |gpio|
+                gpio.pin_mode(0, WiringPi::OUTPUT)
+                # gpio.pin_mode(1, WiringPi::INPUT)
+              end
+
+              # pin_state = io.digital_read(1) # Read from pin 1
+              # puts pin_state
+
+              io.digital_write(0, WiringPi::HIGH) # Turn pin 0 on
+              io.delay(100)                       # Wait
+              io.digital_write(0, WiringPi::LOW)  # Turn pin 0 off
             else
               error!(meta: {
                        status: 400,
