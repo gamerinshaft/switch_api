@@ -1,0 +1,1 @@
+PATH=$PATH:/opt/raspberry-dev/bin
