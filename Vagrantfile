@@ -1,24 +1,28 @@
-Vagrant.configure("2") do |config|
-  config.vm.box = "centos.for.Switch"
-  config.vm.box_url = "https://github.com/2creatives/vagrant-centos/" +
-    "releases/download/v6.5.3/centos65-x86_64-20140116.box"
-  config.vm.provider :virtualbox do |vb|
-    vb.customize [ 'modifyvm', :id, '--memory', 1024 ]
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  config.vm.define :nox do |box|
+    # Every Vagrant virtual environment requires a box to build off of.
+    box.vm.box = "precise64"
+    # The url from where the 'config.vm.box' box will be fetched if it
+    # doesn't already exist on the user's system.
+    box.vm.box_url = "http://files.vagrantup.com/precise64.box"
+    
+    # Boot with a GUI so you can see the screen. (Default is headless)
+    #box.vm.boot_mode = :gui
+    # add a hostonly network if desired
+    #box.vm.network :hostonly, "33.33.33.151"
+
+    box.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppetmanifests"
+      puppet.manifest_file = "raspberry-nox.pp"
+      puppet.module_path = "modules"
+      puppet.options = ["--verbose", "--debug"]
+    end
   end
-  config.vm.network "forwarded_port", guest: 3000, host: 4000
-
-  config.vm.provision :shell, inline: "yum -y update"
-  config.vm.provision :shell, inline: "yum -y install wget"
-  config.vm.provision :shell, inline: "yum -y install tmux"
-  config.vm.provision :shell, inline: "yum -y install graphviz"
-
-  config.vm.provision :shell, path: "provision/chruby.sh"
-  config.vm.provision :shell, path: "provision/ruby-install.sh"
-  config.vm.provision :shell, path: "provision/ruby.sh"
-  config.vm.provision :shell, path: "provision/rails.sh", privileged: false
-  config.vm.provision :shell, path: "provision/foreman.sh", privileged: false
-  config.vm.provision :shell, path: "provision/mysql-server.sh"
-  # config.vm.provision :shell, path: "provision/postgresql-server.sh"
-  config.vm.provision :shell, path: "provision/redis.sh"
-  config.vm.provision :shell, path: "provision/limits.sh"
 end
