@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     if(result || !readable){
       int i = 0;
-      while(i<10){
+      while(i<4){
         digitalWrite(bad_pin, 1);
         delay(500);
         digitalWrite(bad_pin, 0);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         exit(1);
     } else {
       int i = 0;
-      while(i<10){
+      while(i<4){
         digitalWrite(good_pin, 1);
         delay(500);
         digitalWrite(good_pin, 0);
@@ -85,10 +85,16 @@ int scan(FILE *fp)
     // 受光モジュールは受光するとLOWになる
     if(!digitalRead(pin)){ return 1; }
 
-    int on, off;
-
+    int on, off, limit;
+    limit = 0;
     // 送信が開始されるまで待機
-    while( readable && digitalRead(pin) ){}
+    while( readable && digitalRead(pin) && limit <= 10000 ){
+      limit++;
+    }
+
+    if(limit >= 10000){
+      return 1;
+    }
 
     // 解析開始
     while( readable ){
