@@ -3,5 +3,5 @@ json.meta do
   json.message '赤外線データを作成しました。'
 end
 json.response do
-  json.infrared @infrared
+  json.ir_id @infrared
 end

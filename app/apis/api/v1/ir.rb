@@ -4,6 +4,39 @@ module API
   module V1
     class IR < Grape::API
       resource :ir do
+        desc '赤外線一覧の表示', notes: <<-NOTE
+            <h1>赤外線一覧の表示</h1>
+            <p>
+              赤外線一覧を表示します
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+        end
+        get '/', jbuilder: 'api/v1/ir/index' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              @infrareds = user.infrareds
+            end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
+          end
+        end
+
         desc '赤外線の受信', notes: <<-NOTE
             <h1>赤外線を受信します</h1>
             <p>
@@ -40,7 +73,7 @@ module API
                      }, response: {})
               end
               infrared.update(data: "#{fname}")
-              @infrared = infrared
+              @infrared = infrared.id
             end
           else
             error!(meta: {
