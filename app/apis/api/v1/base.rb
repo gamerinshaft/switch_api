@@ -32,7 +32,7 @@ module API
 
       mount V1::Users
       mount V1::Authorize
-      mount V1::Raspberry
+      mount V1::IR
       add_swagger_documentation format: :json, api_version: 'v1', hide_documentation_path: true
     end
   end
