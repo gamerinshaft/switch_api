@@ -9,7 +9,7 @@ module ErrorCodes
   NOT_FOUND_USER          = 8
   SERIAL_PARAMS           = 9
   DATA_PARAM_NIL          = 10
-  FAIL_SHELLSCRIPT        = 11
+  FAIL_SCANIR             = 11
   DEVICE_ID_NOT_SPECIFIED = 12
   DEVICE_NOT_FOUND        = 13
   TIME_SPAN_NOT_SPECIFIED = 14
