@@ -6,6 +6,8 @@
 
 int readable = 1;       // 非同期でイベントが発生した場合、コールバックにより0に設定される
 int pin = 7;       // 入力ピン番号(wiringpiの番号)
+int good_pin = 25; // ok led
+int bad_pin  = 24; // bad led
 int span = 10;      // 継続時間判定の間隔(us)
 int max_wait = 40000;   // 最大継続時間(us)
 
@@ -46,6 +48,8 @@ int main(int argc, char *argv[])
     }
 
     pinMode(pin, INPUT);
+    pinMode(good_pin, OUTPUT);
+    pinMode(bad_pin, OUTPUT);
 
     // スキャン開始
     result = scan(fp);
@@ -53,9 +57,25 @@ int main(int argc, char *argv[])
     close(fp);
 
     if(result || !readable){
+      int i = 0;
+      while(i<10){
+        digitalWrite(bad_pin, 1);
+        delay(500);
+        digitalWrite(bad_pin, 0);
+        delay(500);
+        i++;
+      }
         exit(1);
     } else {
-        reutrn(0)
+      int i = 0;
+      while(i<10){
+        digitalWrite(good_pin, 1);
+        delay(500);
+        digitalWrite(good_pin, 0);
+        delay(500);
+        i++;
+      }
+        return(0);
     }
     return 0;
 }
