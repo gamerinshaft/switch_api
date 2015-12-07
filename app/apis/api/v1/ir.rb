@@ -29,6 +29,16 @@ module API
               command = File.join(path, "commands/recieve")
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
+              status = `echo %ERRORLEVEL%`
+              if(status != 0){
+                error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.fail_shell_sclipt'),
+                         code: ErrorCodes::FAIL_SHELLSCRIPT
+                       ]
+                     }, response: {})
+              }
               infrared.update(data: "#{fname}")
               @infrared = infrared
             end
