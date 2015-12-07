@@ -130,6 +130,52 @@ module API
              }, response: {})
           end
         end
+        desc '赤外線の削除', notes: <<-NOTE
+            <h1>赤外線を削除します</h1>
+            <p>
+              赤外線をデータベースから削除します
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :ir_id, type: Integer, desc: 'IR Id.'
+        end
+        delete '/', jbuilder: 'api/v1/ir/destroy' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if infrared = user.infrareds.find_by(id: params[:ir_id])
+                name = infrared.data
+                file = Rails.root.to_s + "/data/" + name
+                File.delete file
+                infrared.destroy
+              else
+               error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.ir_not_found'),
+                         code: ErrorCodes::NOT_FOUND
+                       ]
+                     }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
+          end
+        end
       end
     end
   end
