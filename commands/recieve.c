@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     if(result || !readable){
       int i = 0;
-      while(i<10){
+      while(i<4){
         digitalWrite(bad_pin, 1);
         delay(500);
         digitalWrite(bad_pin, 0);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         exit(1);
     } else {
       int i = 0;
-      while(i<10){
+      while(i<4){
         digitalWrite(good_pin, 1);
         delay(500);
         digitalWrite(good_pin, 0);
