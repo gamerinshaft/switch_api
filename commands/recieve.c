@@ -92,7 +92,7 @@ int scan(FILE *fp)
       limit++;
     }
 
-    if(limit >= 10000){
+    if(limit >= 100000){
       return 1;
     }
 
