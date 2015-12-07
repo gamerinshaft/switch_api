@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     if(result || !readable){
         exit(1);
     } else {
-        reutrn(0)
+        return(0);
     }
     return 0;
 }
