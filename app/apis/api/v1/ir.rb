@@ -29,6 +29,16 @@ module API
               command = File.join(path, "commands/recieve")
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
+              if File.read("#{path}/data/#{fname}").size == 0
+                infrared.destroy
+                error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.fail_scanir'),
+                         code: ErrorCodes::FAIL_SCANIR
+                       ]
+                     }, response: {})
+              end
               infrared.update(data: "#{fname}")
               @infrared = infrared
             end
