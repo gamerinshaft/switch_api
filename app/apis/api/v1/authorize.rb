@@ -69,6 +69,14 @@ module API
               @screen_name = obj.screen_name
               @token = token.token
             end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
           end
         end
 
