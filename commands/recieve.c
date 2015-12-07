@@ -88,11 +88,12 @@ int scan(FILE *fp)
     int on, off, limit;
     limit = 0;
     // 送信が開始されるまで待機
-    while( readable && digitalRead(pin) && limit <= 10000 ){
+    while( readable && digitalRead(pin) && limit <= 50000000 ){
       limit++;
     }
 
-    if(limit >= 100000){
+    if(limit >= 50000000){
+      readable = 1;
       return 1;
     }
 
