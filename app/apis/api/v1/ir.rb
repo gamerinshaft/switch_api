@@ -30,7 +30,7 @@ module API
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               status = `echo %ERRORLEVEL%`
-              if(status != 0){
+              if status != 0
                 error!(meta: {
                        status: 400,
                        errors: [
@@ -38,7 +38,7 @@ module API
                          code: ErrorCodes::FAIL_SHELLSCRIPT
                        ]
                      }, response: {})
-              }
+              end
               infrared.update(data: "#{fname}")
               @infrared = infrared
             end
