@@ -14,8 +14,9 @@ module API
           requires :auth_token, type: String, desc: 'Auth token.'
         end
         get '/recieve', jbuilder: 'api/v1/ir/recieve' do
-          # path = File.join(Rails.root.to_s + 'commands/blink.sh')
-          # `sudo sh #{path}`
+          path = Rails.root.to_s
+          command = File.join(path, "commands/recieve")
+          `#{command} #{path}/data/`
         end
       end
     end
