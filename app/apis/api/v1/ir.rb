@@ -73,8 +73,8 @@ module API
                      }, response: {})
               end
               infrared.update(data: "#{fname}")
-              user.logs.create(name: "赤外線を受信しました", status: :recieve_ir)
-              user.logs.infrared = infrared
+              log = user.logs.create(name: "赤外線を受信しました", status: :recieve_ir)
+              log.infrared = infrared
               @infrared = infrared
             end
           else
@@ -115,8 +115,8 @@ module API
                 `#{command} #{path}/data/#{fname}`
                 count = infrared.count + 1
                 infrared.update(count: count)
-                user.logs.create(name: "「#{infrared.name}」を実行しました", status: :send_ir)
-                user.logs.infrared = infrared
+                log = user.logs.create(name: "「#{infrared.name}」を実行しました", status: :send_ir)
+                log.infrared = infrared
                 @infrared = infrared
               else
                error!(meta: {
@@ -162,8 +162,8 @@ module API
             else
               if infrared = user.infrareds.find_by(id: params[:ir_id])
                 infrared.update(name: params[:name])
-                user.logs.create(name: "「#{infrared.name}」に名前を変更しました", status: :update_ir)
-                user.logs.infrared = infrared
+                log = user.logs.create(name: "「#{infrared.name}」に名前を変更しました", status: :update_ir)
+                log.infrared = infrared
                 @infrared = infrared
               else
                error!(meta: {
@@ -210,8 +210,8 @@ module API
                 name = infrared.data
                 file = Rails.root.to_s + "/data/" + name
                 File.delete file
-                user.logs.create(name: "「#{infrared.name}」を削除しました", status: :destroy_ir)
-                user.logs.infrared = infrared
+                log = user.logs.create(name: "「#{infrared.name}」を削除しました", status: :destroy_ir)
+                log.infrared = infrared
                 infrared.destroy
               else
                error!(meta: {
