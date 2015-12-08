@@ -233,6 +233,44 @@ module API
              }, response: {})
           end
         end
+        desc '赤外線のlog', notes: <<-NOTE
+            <h1>赤外線のログを表示します</h1>
+            <p>
+              sizeを渡すと最新〜sizeまでのログを取得します。
+              何も指定しない場合は全部取得します
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          optional :size, type: Integer, desc: 'Array size'
+        end
+        get '/logs', jbuilder: 'api/v1/ir/logs' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if params[:size].nil?
+                @logs = user.logs.sort{|a,b|b<=>a}
+              else
+                @logs = user.logs.last(params[:size].to_i).sort{|a,b|b<=>a}
+              end
+            end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
+          end
+        end
       end
     end
   end
