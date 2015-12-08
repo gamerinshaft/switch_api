@@ -73,7 +73,7 @@ module API
                      }, response: {})
               end
               infrared.update(data: "#{fname}")
-              @infrared = infrared.id
+              @infrared = infrared
             end
           else
             error!(meta: {
@@ -111,6 +111,8 @@ module API
                 path = Rails.root.to_s
                 command = File.join(path, "commands/send")
                 `#{command} #{path}/data/#{fname}`
+                count = infrared.count + 1
+                infrared.update(count: count)
                 @infrared = infrared
               else
                error!(meta: {

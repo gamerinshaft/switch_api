@@ -3,6 +3,6 @@ json.meta do
   json.message '赤外線データ一覧を受信しました。'
 end
 json.response do
-  json.infrareds @infrareds, :name, :id, :updated_at
+  json.infrareds @infrareds, :name, :id, :count, :updated_at
 end
 
