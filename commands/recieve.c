@@ -82,6 +82,9 @@ int main(int argc, char *argv[])
 
 int scan(FILE *fp)
 {
+    digitalWrite(good_pin, 1);
+    digitalWrite(bad_pin, 1);
+
     // 受光モジュールは受光するとLOWになる
     if(!digitalRead(pin)){ return 1; }
 
@@ -94,6 +97,8 @@ int scan(FILE *fp)
 
     if(limit >= 50000000){
       readable = 1;
+      digitalWrite(good_pin, 0);
+      digitalWrite(bad_pin, 0);
       return 1;
     }
 
@@ -105,6 +110,8 @@ int scan(FILE *fp)
         if(off > max_wait){ break; }
     }
 
+    digitalWrite(good_pin, 0);
+    digitalWrite(bad_pin, 0);
     return 0;
 }
 
