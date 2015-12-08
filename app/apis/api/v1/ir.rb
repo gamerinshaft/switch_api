@@ -85,6 +85,53 @@ module API
              }, response: {})
           end
         end
+        desc '赤外線の送信', notes: <<-NOTE
+            <h1>赤外線を送信します</h1>
+            <p>
+              赤外線を照射します
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :ir_id, type: Integer, desc: 'IR Id.'
+        end
+        post '/send', jbuilder: 'api/v1/ir/send' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if infrared = user.infrareds.find_by(id: params[:ir_id])
+                fname = infrared.data
+                path = Rails.root.to_s
+                command = File.join(path, "commands/send")
+                `#{command} #{path}/data/#{fname}`
+                @infrared = infrared
+              else
+               error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.ir_not_found'),
+                         code: ErrorCodes::NOT_FOUND
+                       ]
+                     }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
+          end
+        end
         desc '赤外線の名前変更', notes: <<-NOTE
             <h1>赤外線の名前を変更します</h1>
             <p>
