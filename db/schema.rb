@@ -25,12 +25,10 @@ ActiveRecord::Schema.define(version: 20151207081758) do
   create_table "infrared_groups", force: :cascade do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.integer  "log_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "infrared_groups", ["log_id"], name: "index_infrared_groups_on_log_id"
   add_index "infrared_groups", ["user_id"], name: "index_infrared_groups_on_user_id"
 
   create_table "infrared_relationals", force: :cascade do |t|
