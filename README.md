@@ -17,3 +17,8 @@ sudo gcc recieve.c -o recieve -lwiringPi
 ```
 sudo gcc send.c -lm -o send -lwiringPi
 ```
+
+### 本番サーバーからdumpファイルを作成
+```
+scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
+```
