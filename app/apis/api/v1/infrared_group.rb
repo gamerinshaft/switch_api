@@ -13,6 +13,39 @@ module API
         get '/ping', jbuilder: 'api/v1/group/ping' do
         end
 
+        desc 'グループの一覧表示', notes: <<-NOTE
+            <h1>グループを一覧表示する</h1>
+            <p>
+              グループを一覧表示します。
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+        end
+        get '/', jbuilder: 'api/v1/group/index' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              @groups = user.infrared_groups
+            end
+          else
+            error!(meta: {
+               status: 400,
+               errors: [
+                 message: ('errors.messages.invalid_token'),
+                 code: ErrorCodes::INVALID_TOKEN
+               ]
+             }, response: {})
+          end
+        end
+
         desc 'グループの作成', notes: <<-NOTE
             <h1>グループを作成する</h1>
             <p>
