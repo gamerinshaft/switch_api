@@ -22,3 +22,9 @@ sudo gcc send.c -lm -o send -lwiringPi
 ```
 scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
 ```
+
+### 赤外線情報ファイルの取得
+
+```
+scp -r pi@hostname:~/rails_app/switch_api/data ./
+```
