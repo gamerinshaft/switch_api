@@ -171,6 +171,76 @@ module API
           end
         end
 
+        resource :ir do
+          desc '赤外線の追加', notes: <<-NOTE
+              <h1>グループに赤外線を追加する</h1>
+              <p>
+                グループに赤外線を追加します。
+              </p>
+            NOTE
+          params do
+            requires :auth_token, type: String, desc: 'Auth token.'
+            requires :group_id, type: Integer, desc: 'Group_id.'
+            requires :ir_id, type: Integer, desc: 'IR_id.'
+
+          end
+          post '/add', jbuilder: 'api/v1/group/ir/add' do
+            if (token = AuthToken.find_by(token: params[:auth_token]))
+              if user.info.nil?
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.user_not_found'),
+                           code: ErrorCodes::NOT_FOUND_USER
+                         ]
+                       }, response: {})
+              else
+                if group = user.infrared_groups.find_by(id: params[:group_id])
+                  if ir = user.infrareds.find_by(id: params[:ir_id])
+                    if !group.infrareds.find_by(id: params[:ir_id])
+                      group.infrareds << ir
+                      @group = group
+                      @ir = ir
+                    else
+                      error!(meta: {
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.ir_already_existing'),
+                             code: ErrorCodes::ALREADY_EXISTING
+                           ]
+                         }, response: {})
+                    end
+                  else
+                    error!(meta: {
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.ir_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
+                  end
+                else
+                  error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.group_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
+                end
+              end
+            else
+              error!(meta: {
+                 status: 400,
+                 errors: [
+                   message: ('errors.messages.invalid_token'),
+                   code: ErrorCodes::INVALID_TOKEN
+                 ]
+               }, response: {})
+            end
+          end
+
+        end
       end
     end
   end
