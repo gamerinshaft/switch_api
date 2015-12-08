@@ -1,4 +1,5 @@
 class Log < ActiveRecord::Base
   belongs_to :user
-  has_one :infrared, dependent: :destroy
+  belongs_to :infrared, dependent: :destroy
+  enum status: %i(recieve_ir send_ir update_ir destroy_ir)
 end
