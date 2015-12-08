@@ -45,10 +45,10 @@ ActiveRecord::Schema.define(version: 20151207081758) do
     t.string   "name"
     t.string   "data"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.integer  "log_id"
-    t.integer  "count"
+    t.integer  "count",      default: 0
   end
 
   add_index "infrareds", ["log_id"], name: "index_infrareds_on_log_id"
