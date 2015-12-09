@@ -182,7 +182,6 @@ module API
             requires :auth_token, type: String, desc: 'Auth token.'
             requires :group_id, type: Integer, desc: 'Group_id.'
             requires :ir_id, type: Integer, desc: 'IR_id.'
-
           end
           post '/add', jbuilder: 'api/v1/group/ir/add' do
             if (token = AuthToken.find_by(token: params[:auth_token]))
@@ -239,6 +238,53 @@ module API
                }, response: {})
             end
           end
+
+          desc 'グループの赤外線一覧表示', notes: <<-NOTE
+              <h1>グループの赤外線を一覧表示する</h1>
+              <p>
+                グループの赤外線を一覧表示します。
+              </p>
+            NOTE
+          params do
+            requires :auth_token, type: String, desc: 'Auth token.'
+            requires :group_id, type: Integer, desc: 'Group_id.'
+          end
+          get '/', jbuilder: 'api/v1/group/ir/index' do
+            if (token = AuthToken.find_by(token: params[:auth_token]))
+              if user.info.nil?
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.user_not_found'),
+                           code: ErrorCodes::NOT_FOUND_USER
+                         ]
+                       }, response: {})
+              else
+                if group = user.infrared_groups.find_by(id: params[:group_id])
+                    @group = group
+                    @infrareds = group.infrareds
+                else
+                  error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.group_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
+                end
+              end
+            else
+              error!(meta: {
+                 status: 400,
+                 errors: [
+                   message: ('errors.messages.invalid_token'),
+                   code: ErrorCodes::INVALID_TOKEN
+                 ]
+               }, response: {})
+            end
+          end
+
+
 
         end
       end
