@@ -21,13 +21,13 @@ $ sudo gcc send.c -lm -o send -lwiringPi
 ### 本番サーバーからdumpファイルを作成
 
 ```sh
-scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
+$ scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
 ```
 
 ### 赤外線情報ファイルの取得
 
 ```sh
-scp -r pi@hostname:~/rails_app/switch_api/data ./
+$ scp -r pi@hostname:~/rails_app/switch_api/data ./
 ```
 
 ### Vagrantで実行
