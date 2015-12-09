@@ -71,12 +71,12 @@ module API
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 

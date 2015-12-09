@@ -28,12 +28,12 @@ module API
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 
@@ -59,49 +59,49 @@ module API
                        ]
                      }, response: {})
             else
-              infrared = user.infrareds.create(name: "名無しの赤外線", data: "")
+              infrared = user.infrareds.create(name: '名無しの赤外線', data: '')
               path = Rails.root.to_s
-              command = File.join(path, "commands/recieve")
+              command = File.join(path, 'commands/recieve')
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               if File.read("#{path}/data/#{fname}").size == 0
                 infrared.destroy
                 error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.fail_scanir'),
-                         code: ErrorCodes::FAIL_SCANIR
-                       ]
-                     }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.fail_scanir'),
+                           code: ErrorCodes::FAIL_SCANIR
+                         ]
+                       }, response: {})
               end
               infrared.update(data: "#{fname}")
-              log = user.logs.create(name: "赤外線を受信しました", status: :recieve_ir)
+              log = user.logs.create(name: '赤外線を受信しました', status: :recieve_ir)
               log.infrared = infrared
-              if !params[:group_id].nil?
+              unless params[:group_id].nil?
                 if group = user.infrared_groups.find_by(id: params[:group_id])
                   group.infrareds << infrared
                   log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
                   log.infrared = infrared
                 else
                   error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.ir_accept_but_group_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.ir_accept_but_group_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
                 end
               end
               @infrared = infrared
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
         desc '赤外線の送信', notes: <<-NOTE
@@ -128,7 +128,7 @@ module API
               if infrared = user.infrareds.find_by(id: params[:ir_id])
                 fname = infrared.data
                 path = Rails.root.to_s
-                command = File.join(path, "commands/send")
+                command = File.join(path, 'commands/send')
                 `#{command} #{path}/data/#{fname}`
                 count = infrared.count + 1
                 infrared.update(count: count)
@@ -136,23 +136,23 @@ module API
                 log.infrared = infrared
                 @infrared = infrared
               else
-               error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.ir_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.ir_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
         desc '赤外線の名前変更', notes: <<-NOTE
@@ -183,23 +183,23 @@ module API
                 log.infrared = infrared
                 @infrared = infrared
               else
-               error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.ir_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.ir_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
         desc '赤外線の削除', notes: <<-NOTE
@@ -225,29 +225,29 @@ module API
             else
               if infrared = user.infrareds.find_by(id: params[:ir_id])
                 name = infrared.data
-                file = Rails.root.to_s + "/data/" + name
+                file = Rails.root.to_s + '/data/' + name
                 File.delete file
                 log = user.logs.create(name: "「#{infrared.name}」を削除しました", status: :destroy_ir)
                 log.infrared = infrared
                 infrared.destroy
               else
-               error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.ir_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.ir_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
         desc '赤外線のlog', notes: <<-NOTE
@@ -273,19 +273,19 @@ module API
                      }, response: {})
             else
               if params[:size].nil?
-                @logs = user.logs.sort{|a,b|b<=>a}
+                @logs = user.logs.sort { |a, b| b <=> a }
               else
-                @logs = user.logs.last(params[:size].to_i).sort{|a,b|b<=>a}
+                @logs = user.logs.last(params[:size].to_i).sort { |a, b| b <=> a }
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
       end

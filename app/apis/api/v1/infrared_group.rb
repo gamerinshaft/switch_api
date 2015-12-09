@@ -37,12 +37,12 @@ module API
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 
@@ -71,12 +71,12 @@ module API
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 
@@ -107,22 +107,22 @@ module API
                 @group = group
               else
                 error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.group_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.group_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 
@@ -152,22 +152,22 @@ module API
                 group.destroy
               else
                 error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.group_not_found'),
-                         code: ErrorCodes::NOT_FOUND
-                       ]
-                     }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.group_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
               end
             end
           else
             error!(meta: {
-               status: 400,
-               errors: [
-                 message: ('errors.messages.invalid_token'),
-                 code: ErrorCodes::INVALID_TOKEN
-               ]
-             }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         end
 
@@ -204,40 +204,40 @@ module API
                       @infrared = infrared
                     else
                       error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.ir_already_existing'),
-                             code: ErrorCodes::ALREADY_EXISTING
-                           ]
-                         }, response: {})
+                               status: 400,
+                               errors: [
+                                 message: ('errors.messages.ir_already_existing'),
+                                 code: ErrorCodes::ALREADY_EXISTING
+                               ]
+                             }, response: {})
                     end
                   else
                     error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.ir_not_found'),
-                             code: ErrorCodes::NOT_FOUND
-                           ]
-                         }, response: {})
+                             status: 400,
+                             errors: [
+                               message: ('errors.messages.ir_not_found'),
+                               code: ErrorCodes::NOT_FOUND
+                             ]
+                           }, response: {})
                   end
                 else
                   error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.group_not_found'),
-                           code: ErrorCodes::NOT_FOUND
-                         ]
-                       }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.group_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
                 end
               end
             else
               error!(meta: {
-                 status: 400,
-                 errors: [
-                   message: ('errors.messages.invalid_token'),
-                   code: ErrorCodes::INVALID_TOKEN
-                 ]
-               }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.invalid_token'),
+                         code: ErrorCodes::INVALID_TOKEN
+                       ]
+                     }, response: {})
             end
           end
 
@@ -273,40 +273,40 @@ module API
                       log.infrared = infrared
                     else
                       error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.ir_not_found_in_group'),
-                             code: ErrorCodes::NOT_FOUND
-                           ]
-                         }, response: {})
+                               status: 400,
+                               errors: [
+                                 message: ('errors.messages.ir_not_found_in_group'),
+                                 code: ErrorCodes::NOT_FOUND
+                               ]
+                             }, response: {})
                     end
                   else
                     error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.ir_not_found'),
-                             code: ErrorCodes::NOT_FOUND
-                           ]
-                         }, response: {})
+                             status: 400,
+                             errors: [
+                               message: ('errors.messages.ir_not_found'),
+                               code: ErrorCodes::NOT_FOUND
+                             ]
+                           }, response: {})
                   end
                 else
                   error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.group_not_found'),
-                           code: ErrorCodes::NOT_FOUND
-                         ]
-                       }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.group_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
                 end
               end
             else
               error!(meta: {
-                 status: 400,
-                 errors: [
-                   message: ('errors.messages.invalid_token'),
-                   code: ErrorCodes::INVALID_TOKEN
-                 ]
-               }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.invalid_token'),
+                         code: ErrorCodes::INVALID_TOKEN
+                       ]
+                     }, response: {})
             end
           end
 
@@ -332,31 +332,28 @@ module API
                        }, response: {})
               else
                 if group = user.infrared_groups.find_by(id: params[:group_id])
-                    @group = group
-                    @infrareds = group.infrareds
+                  @group = group
+                  @infrareds = group.infrareds
                 else
                   error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.group_not_found'),
-                           code: ErrorCodes::NOT_FOUND
-                         ]
-                       }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.group_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
                 end
               end
             else
               error!(meta: {
-                 status: 400,
-                 errors: [
-                   message: ('errors.messages.invalid_token'),
-                   code: ErrorCodes::INVALID_TOKEN
-                 ]
-               }, response: {})
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.invalid_token'),
+                         code: ErrorCodes::INVALID_TOKEN
+                       ]
+                     }, response: {})
             end
           end
-
-
-
         end
       end
     end

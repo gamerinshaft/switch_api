@@ -5,4 +5,3 @@ end
 json.response do
   json.logs @logs
 end
-

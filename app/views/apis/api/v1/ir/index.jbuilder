@@ -5,4 +5,3 @@ end
 json.response do
   json.infrareds @infrareds, :name, :id, :count, :updated_at
 end
-

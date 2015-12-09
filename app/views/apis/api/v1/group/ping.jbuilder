@@ -1,1 +1,1 @@
-json.response "pong"
+json.response 'pong'
