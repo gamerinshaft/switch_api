@@ -40,11 +40,13 @@ module API
         desc '赤外線の受信', notes: <<-NOTE
             <h1>赤外線を受信します</h1>
             <p>
-              赤外線を受信します
+              赤外線を受信します。
+              任意でグループIDを渡すと、そのグループに紐付けてくれます。
             </p>
           NOTE
         params do
           requires :auth_token, type: String, desc: 'Auth token.'
+          optional :group_id, type: Integer, desc: 'Group ID.'
         end
         post '/recieve', jbuilder: 'api/v1/ir/recieve' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
@@ -75,6 +77,21 @@ module API
               infrared.update(data: "#{fname}")
               log = user.logs.create(name: "赤外線を受信しました", status: :recieve_ir)
               log.infrared = infrared
+              if !params[:group_id].nil?
+                if group = user.infrared_groups.find_by(id: params[:group_id])
+                  group.infrareds << infrared
+                  log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
+                  log.infrared = infrared
+                else
+                  error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.ir_accept_but_group_not_found'),
+                         code: ErrorCodes::NOT_FOUND
+                       ]
+                     }, response: {})
+                end
+              end
               @infrared = infrared
             end
           else
