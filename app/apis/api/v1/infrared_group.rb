@@ -239,6 +239,73 @@ module API
             end
           end
 
+          desc '赤外線の削除', notes: <<-NOTE
+              <h1>グループに赤外線情報を削除する</h1>
+              <p>
+                グループに赤外線情報を削除します。
+              </p>
+            NOTE
+          params do
+            requires :auth_token, type: String, desc: 'Auth token.'
+            requires :group_id, type: Integer, desc: 'Group_id.'
+            requires :ir_id, type: Integer, desc: 'IR_id.'
+          end
+          delete '/', jbuilder: 'api/v1/group/ir/remove' do
+            if (token = AuthToken.find_by(token: params[:auth_token]))
+              if user.info.nil?
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.user_not_found'),
+                           code: ErrorCodes::NOT_FOUND_USER
+                         ]
+                       }, response: {})
+              else
+                if group = user.infrared_groups.find_by(id: params[:group_id])
+                  if ir = user.infrareds.find_by(id: params[:ir_id])
+                    if relational = group.infrared_relationals.find_by(infrared_id: params[:ir_id])
+                      @group = group
+                      @ir = ir
+                      relational.destroy
+                    else
+                      error!(meta: {
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.ir_not_found_in_group'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
+                    end
+                  else
+                    error!(meta: {
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.ir_not_found'),
+                             code: ErrorCodes::NOT_FOUND
+                           ]
+                         }, response: {})
+                  end
+                else
+                  error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.group_not_found'),
+                           code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
+                end
+              end
+            else
+              error!(meta: {
+                 status: 400,
+                 errors: [
+                   message: ('errors.messages.invalid_token'),
+                   code: ErrorCodes::INVALID_TOKEN
+                 ]
+               }, response: {})
+            end
+          end
+
           desc 'グループの赤外線一覧表示', notes: <<-NOTE
               <h1>グループの赤外線を一覧表示する</h1>
               <p>
