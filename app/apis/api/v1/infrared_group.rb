@@ -183,7 +183,7 @@ module API
             requires :group_id, type: Integer, desc: 'Group_id.'
             requires :ir_id, type: Integer, desc: 'IR_id.'
           end
-          post '/add', jbuilder: 'api/v1/group/ir/add' do
+          post '/', jbuilder: 'api/v1/group/ir/add' do
             if (token = AuthToken.find_by(token: params[:auth_token]))
               if user.info.nil?
                 error!(meta: {
