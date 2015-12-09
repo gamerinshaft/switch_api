@@ -195,11 +195,13 @@ module API
                        }, response: {})
               else
                 if group = user.infrared_groups.find_by(id: params[:group_id])
-                  if ir = user.infrareds.find_by(id: params[:ir_id])
+                  if infrared = user.infrareds.find_by(id: params[:ir_id])
                     if !group.infrareds.find_by(id: params[:ir_id])
-                      group.infrareds << ir
+                      group.infrareds << infrared
+                      log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
+                      log.infrared = infrared
                       @group = group
-                      @ir = ir
+                      @infrared = infrared
                     else
                       error!(meta: {
                            status: 400,
@@ -262,11 +264,13 @@ module API
                        }, response: {})
               else
                 if group = user.infrared_groups.find_by(id: params[:group_id])
-                  if ir = user.infrareds.find_by(id: params[:ir_id])
+                  if infrared = user.infrareds.find_by(id: params[:ir_id])
                     if relational = group.infrared_relationals.find_by(infrared_id: params[:ir_id])
                       @group = group
-                      @ir = ir
+                      @infrared = infrared
                       relational.destroy
+                      log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」から削除しました", status: :remove_ir)
+                      log.infrared = infrared
                     else
                       error!(meta: {
                            status: 400,
