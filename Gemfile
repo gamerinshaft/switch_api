@@ -38,6 +38,7 @@ gem 'grape-swagger'
 gem 'grape-swagger-ui'
 gem 'haml-rails'
 gem 'rubocop', group: :development
+gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug'
