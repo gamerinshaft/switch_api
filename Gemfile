@@ -37,8 +37,8 @@ gem 'grape-jbuilder'
 gem 'grape-swagger'
 gem 'grape-swagger-ui'
 gem 'haml-rails'
+gem 'clockwork'
 gem 'rubocop', group: :development
-gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug'
