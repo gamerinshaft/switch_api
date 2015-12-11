@@ -30,7 +30,7 @@ end
 
 every(1.second, 'seconds.job', :thread => true) do
   path = Rails.root.to_s
-  command = File.join(path, 'commands/recieve')
+  command = File.join(path, 'commands/send')
   fname = "user_#{user.id}_ir_#{infrared.id}.txt"
   `#{command} #{path}/data/#{fname}`
 end

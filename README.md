@@ -30,6 +30,12 @@ $ scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
 $ scp -r pi@hostname:~/rails_app/switch_api/data ./
 ```
 
+### タスクスケジューラーを起動
+
+```sh
+$ sudo bundle exec clockwork /config/clock.rb
+```
+
 ### Vagrantで実行
 
 ```sh
