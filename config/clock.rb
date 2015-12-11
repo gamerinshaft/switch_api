@@ -29,5 +29,8 @@ every(1.week, 'weeks.job') do
 end
 
 every(1.second, 'seconds.job', :thread => true) do
-  puts AuthToken.all.count
+  path = Rails.root.to_s
+  command = File.join(path, 'commands/recieve')
+  fname = "user_#{user.id}_ir_#{infrared.id}.txt"
+  `#{command} #{path}/data/#{fname}`
 end
