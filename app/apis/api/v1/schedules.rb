@@ -312,8 +312,10 @@ module API
                   message.gsub!(/時毎分/u,"時に毎分")
                   message = message + "実行します"
                   schedule = user.schedules.create(name: params[:name], cron: params[:cron])
-                  schedule.update(job_name: "schedule_#{user.id}_#{schedule.id}")
+                  cron = params[:cron]
+                  schedule.update(description: "#{message}", cron: "#{cron}", job_name: "schedule_#{user.id}_#{schedule.id}")
                   infrared.schedule = schedule
+                  Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: cron, args: schedule})
                   @schedule = schedule
                   @message = message
                 else
