@@ -5,5 +5,3 @@ end
 json.response do
   json.schedule @schedule
 end
-
-json.message @message
