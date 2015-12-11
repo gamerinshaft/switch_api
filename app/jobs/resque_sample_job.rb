@@ -3,7 +3,7 @@ class ResqueSampleJob
   def self.perform(text)
     path = File.expand_path("log/resque_sample.log", Rails.root)
     File.open(path, 'a') do |f|
-      f.puts text
+      f.puts text["screen_name"]
     end
   end
 end
