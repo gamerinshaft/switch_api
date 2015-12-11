@@ -70,10 +70,12 @@ ActiveRecord::Schema.define(version: 20151211143436) do
     t.string   "cron"
     t.string   "job_name"
     t.integer  "user_id"
+    t.integer  "infrared_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
+  add_index "schedules", ["infrared_id"], name: "index_schedules_on_infrared_id"
   add_index "schedules", ["user_id"], name: "index_schedules_on_user_id"
 
   create_table "user_infos", force: :cascade do |t|

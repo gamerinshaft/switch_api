@@ -6,6 +6,7 @@ class CreateSchedules < ActiveRecord::Migration
       t.string :cron
       t.string :job_name
       t.references :user, index: true, foreign_key: true
+      t.references :infrared, index: true, foreign_key: true
 
       t.timestamps null: false
     end
