@@ -6,6 +6,10 @@
 基本git flowの思想の元ブランチは切っていて、
 circleCIでテストを動かして通らない場合はプルリクを受け付けない方針をとっています。
 
+## 下準備
+
+クローンしたプロジェクト内のプログラムをコンパイルする
+
 ### 受信コマンドコンパイル
 
 ```sh
@@ -18,23 +22,43 @@ $ sudo gcc recieve.c -o recieve -lwiringPi
 $ sudo gcc send.c -lm -o send -lwiringPi
 ```
 
-### 本番サーバーからdumpファイルを作成
+## サーバーを立てる
+
+一部権限を求められるshコマンドが含まれているので、`sudo`をつけると間違いないかも
+
+### Rails立ち上げ
 
 ```sh
-$ scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
+$ sudo rails s
 ```
-
-### 赤外線情報ファイルの取得
+### Redis立ち上げ
 
 ```sh
-$ scp -r pi@hostname:~/rails_app/switch_api/data ./
+$ redis-server
 ```
 
-### タスクスケジューラーを起動
+### Resque立ち上げ
 
 ```sh
-$ sudo bundle exec clockwork /config/clock.rb
+$ $ QUEUE=* rake environment resque:work
 ```
+
+### scheduler立ち上げ
+
+```sh
+$ DYNAMIC_SCHEDULE=true rake environment resque:scheduler
+```
+
+### ログを監視
+
+```sh
+$ tail -f log/outputFileName
+```
+
+
+## スケジューラーに関して
+
+cron形式でデータを渡す時の値の諸々
 
 ### cronの設定
 
@@ -57,7 +81,26 @@ $ sudo bundle exec clockwork /config/clock.rb
 2 8-20/3 * * *　　　　　　8:02,11:02,14:02,17:02,20:02に実行
 30 5 1,15 * *　　　　　　 1日と 15日の 5:30に実行
 ```
-### Vagrantで実行
+
+
+
+## その他
+
+データの同期に関して
+
+### 本番サーバーからdumpファイルを作成
+
+```sh
+$ scp pi@hostname:~/rails_app/switch_api/db/development.sqlite3 ./dump.sqlite3
+```
+
+### 赤外線情報ファイルの取得
+
+```sh
+$ scp -r pi@hostname:~/rails_app/switch_api/data ./
+```
+
+## Vagrantで実行する場合
 
 ```sh
 $ vagrant up
