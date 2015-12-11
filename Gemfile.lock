@@ -54,6 +54,9 @@ GEM
     builder (3.2.2)
     byebug (8.2.1)
     choice (0.2.0)
+    clockwork (1.2.0)
+      activesupport
+      tzinfo
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -293,6 +296,7 @@ DEPENDENCIES
   awesome_print
   bcrypt (~> 3.1.7)
   byebug
+  clockwork
   coffee-rails (~> 4.1.0)
   database_cleaner
   factory_girl_rails
