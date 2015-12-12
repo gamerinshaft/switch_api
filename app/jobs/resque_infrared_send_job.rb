@@ -3,6 +3,7 @@ class ResqueInfraredSendJob
   def self.perform(task)
     # path = File.expand_path("log/resque_infrared_send_job.log", Rails.root)
     schedule = Schedule.find_by(id:task["id"])
+    user = schedule.user
     infrared = schedule.infrared
     fname = infrared.data
     path = Rails.root.to_s

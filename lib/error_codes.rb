@@ -22,4 +22,5 @@ module ErrorCodes
   NEED_A_PASSWORD  = 21
   NOT_FOUND_INFO = 22
   INVALID_CRON   = 23
+  NOT_FOUND_SCHEDULE = 24
 end
