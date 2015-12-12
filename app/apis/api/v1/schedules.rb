@@ -389,11 +389,21 @@ module API
                      }, response: {})
             else
               if schedule = user.schedules.find_by(id: params[:schedule_id])
-                Resque.remove_schedule(schedule.job_name)
-                schedule.update(status: :inactive_schedule)
-                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :remove_schedule)
-                log.infrared = schedule.infrared
-                @schedule = schedule
+                if schedule.active_schedule?
+                  Resque.remove_schedule(schedule.job_name)
+                  schedule.update(status: :inactive_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :remove_schedule)
+                  log.infrared = schedule.infrared
+                  @schedule = schedule
+                else
+                  error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.schedule_not_activate'),
+                           code: ErrorCodes::NOT_ACTIVATE_SCHEDULE
+                         ]
+                       }, response: {})
+                end
               else
                 error!(meta: {
                          status: 400,
@@ -534,6 +544,52 @@ module API
                          errors: [
                            message: ('errors.messages.ir_not_found'),
                            code: ErrorCodes::NOT_FOUND
+                         ]
+                       }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+
+        desc 'スケジュールの削除', notes: <<-NOTE
+            <h1>スケジュールを削除します</h1>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :schedule_id, type: Integer, desc: 'Schedule id'
+        end
+        delete '/', jbuilder: 'api/v1/schedule/destroy' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if schedule = user.schedules.find_by(id: params[:schedule_id])
+                if schedule.active_schedule?
+                  Resque.remove_schedule(schedule.job_name)
+                end
+                schedule.destroy
+                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを削除しました", status: :delete_schedule)
+                log.infrared = schedule.infrared
+              else
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.schedule_not_found'),
+                           code: ErrorCodes::NOT_FOUND_SCHEDULE
                          ]
                        }, response: {})
               end
