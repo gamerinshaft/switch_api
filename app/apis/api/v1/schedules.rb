@@ -313,6 +313,64 @@ module API
           end
         end
 
+        desc 'スケジュールを稼働させる', notes: <<-NOTE
+            <h1>スケジューラーを稼働するAPI</h1>
+            <p>
+              選択したスケジューラーを稼働させるためのAPIです。
+            </p>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :schedule_id, type: Integer, desc: 'Schedule id'
+        end
+        post '/activate', jbuilder: 'api/v1/schedule/activate' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if schedule = user.schedules.find_by(id: params[:schedule_id])
+                if schedule.active_schedule?
+                  error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.schedule_already_set'),
+                         code: ErrorCodes::ALREADY_EXISTING
+                       ]
+                     }, response: {})
+                else
+                  Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: schedule.cron, args: schedule})
+                  schedule.update(status: :active_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを稼働しました", status: :robot_activate_schedule)
+                  log.infrared = schedule.infrared
+                  @schedule = schedule
+                end
+              else
+                error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.schedule_not_found'),
+                         code: ErrorCodes::NOT_FOUND_SCHEDULE
+                       ]
+                     }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+
         desc 'スケジュールの停止', notes: <<-NOTE
             <h1>スケジュールを停止します</h1>
           NOTE
@@ -415,7 +473,7 @@ module API
                   infrared.schedule = schedule
                   Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: cron, args: schedule})
                   schedule.update(status: :active_schedule)
-                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成しました", status: :robot_create_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :robot_create_schedule)
                   log.infrared = infrared
                   @schedule = schedule
                   @message = message
