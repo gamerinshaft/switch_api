@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212213313) do
+ActiveRecord::Schema.define(version: 20151212214054) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -54,12 +54,13 @@ ActiveRecord::Schema.define(version: 20151212213313) do
 
   create_table "logs", force: :cascade do |t|
     t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "name"
     t.integer  "status"
     t.integer  "schedule_id"
     t.integer  "loggable_id"
+    t.string   "loggable_type"
   end
 
   add_index "logs", ["loggable_id"], name: "index_logs_on_loggable_id"
