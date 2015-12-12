@@ -260,6 +260,49 @@ module API
         end
       end
       resource :schedule do
+        desc 'スケジュールの停止', notes: <<-NOTE
+            <h1>スケジュールを停止します</h1>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :schedule_id, type: Integer, desc: 'Schedule id'
+        end
+        post '/remove', jbuilder: 'api/v1/schedule/remove' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if schedule = user.schedules.find_by(id: params[:schedule_id])
+                remove_schedule(schedule.job_name)
+                @schedule = schedule
+              else
+                error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.schedule_not_found'),
+                         code: ErrorCodes::NOT_FOUND_SCHEDULE
+                       ]
+                     }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+      end
+      resource :schedule do
         desc 'スケジュールの作成', notes: <<-NOTE
             <h1>スケジュールを作成します</h1>
             <p>
