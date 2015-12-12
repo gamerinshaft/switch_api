@@ -21,6 +21,35 @@ module API
                  }, response: {})
         end
 
+        def cron_translator(array)
+          translation = ''
+          isEveryWord = false
+          if array.size == 5
+            array.each_with_index do |c, index|
+              if cron_check_value(c, index).to_s.include?('毎')
+                if isEveryWord
+                else
+                  isEveryWord = true
+                  translation = cron_check_value(c, index).to_s + translation
+                end
+              else
+                if index == 4 && array[4] != '*'
+                  translation.gsub!(/毎日/u, '')
+                  translation.gsub!(/毎月/u, '')
+                  translation = cron_check_value(c, index).to_s + translation
+                  translation.gsub!(/曜日の/u, '曜日と') if array[2] != '*'
+                else
+                  translation = cron_check_value(c, index).to_s + translation
+                end
+              end
+            end
+            translation.gsub!(/時毎分/u, '時に毎分')
+            translation += '実行します'
+            return translation
+          else
+            invalid_cron
+          end
+        end
         def cron_check_value(value, index)
           if value =~ /^(([0-9]+)((\,||\-||\/)[0-9]+)*||\*(\/[0-9]+)?)$/
             if integer_string?(value) || value == '*'
@@ -260,12 +289,24 @@ module API
       end
 
       resource :schedule do
+        desc 'cronの翻訳を取得する', notes: <<-NOTE
+            <h1>cronの翻訳を取得します</h1>
+          NOTE
+        params do
+          requires :cron, type: String, desc: 'cron.'
+        end
+        get '/cron_translator', jbuilder: 'api/v1/schedule/cron_translator' do
+          array = params[:cron].split(' ')
+          @translation = cron_translator(array)
+        end
+
         desc 'スケジュール一覧を取得する', notes: <<-NOTE
             <h1>スケジュール一覧を取得します</h1>
             <p>
               null ・・・ すべてのスケジュールの取得<br>
               0    ・・・ 稼働してないスケジュールの取得<br>
               1    ・・・ 稼働しているスケジュールの取得
+            </p>
           NOTE
         params do
           requires :auth_token, type: String, desc: 'Auth token.'
@@ -478,9 +519,9 @@ module API
           NOTE
         params do
           requires :auth_token, type: String, desc: 'Auth token.'
-          requires :ir_id, type: Integer, desc: 'Auth token.'
-          requires :name, type: String, desc: 'Auth token.'
-          requires :cron, type: String, desc: 'Auth token.'
+          requires :ir_id, type: Integer, desc: 'infrared id.'
+          requires :name, type: String, desc: 'name.'
+          requires :cron, type: String, desc: 'cron.'
         end
         post '/', jbuilder: 'api/v1/schedule/create' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
@@ -496,48 +537,16 @@ module API
               if (infrared = Infrared.find_by(id: params[:ir_id]))
                 cron = params[:cron]
                 cron_a = cron.split(' ')
-                message = ' '
-                isEveryWord = false
-                if cron_a.size == 5
-                  cron_a.each_with_index do |c, index|
-                    if cron_check_value(c, index).to_s.include?('毎')
-                      if isEveryWord
-                      else
-                        isEveryWord = true
-                        message = cron_check_value(c, index).to_s + message
-                      end
-                    else
-                      if index == 4 && cron_a[4] != '*'
-                        message.gsub!(/毎日/u, '')
-                        message.gsub!(/毎月/u, '')
-                        message = cron_check_value(c, index).to_s + message
-                        message.gsub!(/曜日の/u, '曜日と') if cron_a[2] != '*'
-                      else
-                        message = cron_check_value(c, index).to_s + message
-                      end
-                    end
-                  end
-                  message.gsub!(/時毎分/u, '時に毎分')
-                  message += '実行します'
-                  schedule = user.schedules.create(name: params[:name], cron: params[:cron])
-                  cron = params[:cron]
-                  schedule.update(description: "#{message}", cron: "#{cron}", job_name: "schedule_#{user.id}_#{schedule.id}")
-                  infrared.schedule = schedule
-                  Resque.set_schedule("#{schedule.job_name}", { class: 'ResqueInfraredSendJob', cron: cron, args: schedule })
-                  schedule.update(status: :active_schedule)
-                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :create_schedule)
-                  log.infrared = infrared
-                  @schedule = schedule
-                  @message = message
-                else
-                  error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.invalid_cron'),
-                             code: ErrorCodes::INVALID_CRON
-                           ]
-                         }, response: {})
-                end
+                translation = cron_translator(cron_a)
+                schedule = user.schedules.create(name: params[:name], cron: params[:cron])
+                cron = params[:cron]
+                schedule.update(description: "#{translation}", cron: "#{cron}", job_name: "schedule_#{user.id}_#{schedule.id}")
+                infrared.schedule = schedule
+                Resque.set_schedule("#{schedule.job_name}", { class: 'ResqueInfraredSendJob', cron: cron, args: schedule })
+                schedule.update(status: :active_schedule)
+                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :create_schedule)
+                log.infrared = infrared
+                @schedule = schedule
               else
                 error!(meta: {
                          status: 400,
