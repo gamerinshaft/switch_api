@@ -345,7 +345,7 @@ module API
                 else
                   Resque.set_schedule("#{schedule.job_name}", class: 'ResqueInfraredSendJob', cron: schedule.cron, args: schedule)
                   schedule.update(status: :active_schedule)
-                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを稼働しました", status: :robot_activate_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを稼働しました", status: :activate_schedule)
                   log.infrared = schedule.infrared
                   @schedule = schedule
                 end
@@ -391,7 +391,52 @@ module API
               if schedule = user.schedules.find_by(id: params[:schedule_id])
                 Resque.remove_schedule(schedule.job_name)
                 schedule.update(status: :inactive_schedule)
-                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :robot_remove_schedule)
+                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :remove_schedule)
+                log.infrared = schedule.infrared
+                @schedule = schedule
+              else
+                error!(meta: {
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.schedule_not_found'),
+                           code: ErrorCodes::NOT_FOUND_SCHEDULE
+                         ]
+                       }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+
+        desc 'スケジュールのリネーム', notes: <<-NOTE
+            <h1>スケジュールをリネームします</h1>
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          requires :name, type: String, desc: 'Name.'
+          requires :schedule_id, type: Integer, desc: 'Schedule id'
+        end
+        put '/rename', jbuilder: 'api/v1/schedule/rename' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              if schedule = user.schedules.find_by(id: params[:schedule_id])
+                schedule.update(name: params[:name])
+                log = user.logs.create(name: "「スケジューラーを#{schedule.name}」にリネームしました", status: :update_schedule)
                 log.infrared = schedule.infrared
                 @schedule = schedule
               else
@@ -470,7 +515,7 @@ module API
                   infrared.schedule = schedule
                   Resque.set_schedule("#{schedule.job_name}", { class: 'ResqueInfraredSendJob', cron: cron, args: schedule })
                   schedule.update(status: :active_schedule)
-                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :robot_create_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :create_schedule)
                   log.infrared = infrared
                   @schedule = schedule
                   @message = message
