@@ -40,7 +40,7 @@ $ redis-server
 ### Resque立ち上げ
 
 ```sh
-$ $ QUEUE=* rake environment resque:work
+$ QUEUE=* rake environment resque:work
 ```
 
 ### scheduler立ち上げ
