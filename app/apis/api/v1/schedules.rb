@@ -280,6 +280,9 @@ module API
             else
               if schedule = user.schedules.find_by(id: params[:schedule_id])
                 Resque.remove_schedule(schedule.job_name)
+                schedule.update(status: :inactive_schedule)
+                log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :robot_remove_schedule)
+                log.infrared = schedule.infrared
                 @schedule = schedule
               else
                 error!(meta: {
@@ -359,6 +362,9 @@ module API
                   schedule.update(description: "#{message}", cron: "#{cron}", job_name: "schedule_#{user.id}_#{schedule.id}")
                   infrared.schedule = schedule
                   Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: cron, args: schedule})
+                  schedule.update(status: :active_schedule)
+                  log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成しました", status: :robot_create_schedule)
+                  log.infrared = infrared
                   @schedule = schedule
                   @message = message
                 else

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151211143436) do
+ActiveRecord::Schema.define(version: 20151212163400) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20151211143436) do
     t.integer  "infrared_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "status"
   end
 
   add_index "schedules", ["infrared_id"], name: "index_schedules_on_infrared_id"
