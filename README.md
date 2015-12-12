@@ -92,7 +92,19 @@ cron形式でデータを渡す時の値の諸々
 30 5 1,15 * *　　　　　　 1日と 15日の 5:30に実行
 ```
 
+## デバッグに関して
 
+### APIのテスト用ページ
+
+```sh
+  SITE_URL/api/swagger
+```
+
+### Resque Schedulerのログページ
+
+```sh
+  SITE_URL/resque
+```
 
 ## その他
 
