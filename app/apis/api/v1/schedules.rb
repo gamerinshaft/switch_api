@@ -279,7 +279,7 @@ module API
                      }, response: {})
             else
               if schedule = user.schedules.find_by(id: params[:schedule_id])
-                remove_schedule(schedule.job_name)
+                Resque.remove_schedule(schedule.job_name)
                 @schedule = schedule
               else
                 error!(meta: {
