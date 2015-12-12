@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212213102) do
+ActiveRecord::Schema.define(version: 20151212213313) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -59,8 +59,10 @@ ActiveRecord::Schema.define(version: 20151212213102) do
     t.string   "name"
     t.integer  "status"
     t.integer  "schedule_id"
+    t.integer  "loggable_id"
   end
 
+  add_index "logs", ["loggable_id"], name: "index_logs_on_loggable_id"
   add_index "logs", ["schedule_id"], name: "index_logs_on_schedule_id"
   add_index "logs", ["user_id"], name: "index_logs_on_user_id"
 
