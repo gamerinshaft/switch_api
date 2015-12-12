@@ -23,4 +23,5 @@ module ErrorCodes
   NOT_FOUND_INFO = 22
   INVALID_CRON   = 23
   NOT_FOUND_SCHEDULE = 24
+  INVALID_PARAMS   = 25
 end
