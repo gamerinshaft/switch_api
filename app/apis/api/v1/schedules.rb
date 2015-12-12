@@ -259,7 +259,60 @@ module API
           end
         end
       end
+
       resource :schedule do
+        desc 'スケジュール一覧を取得する', notes: <<-NOTE
+            <h1>スケジュール一覧を取得します</h1>
+            <p>
+              null ・・・ すべてのスケジュールの取得<br>
+              0    ・・・ 稼働してないスケジュールの取得<br>
+              1    ・・・ 稼働しているスケジュールの取得
+          NOTE
+        params do
+          requires :auth_token, type: String, desc: 'Auth token.'
+          optional :status, type: Integer, desc: 'status number.'
+        end
+        get '/', jbuilder: 'api/v1/schedule/index' do
+          if (token = AuthToken.find_by(token: params[:auth_token]))
+            if user.info.nil?
+              error!(meta: {
+                       status: 400,
+                       errors: [
+                         message: ('errors.messages.user_not_found'),
+                         code: ErrorCodes::NOT_FOUND_USER
+                       ]
+                     }, response: {})
+            else
+              @user = user
+              if params[:status].nil?
+                @schedules = user.schedules
+              elsif params[:status].to_s =~ /^[0-1]$/
+                if params[:status] == 0
+                  @schedules = user.schedules.inactive_schedule
+                elsif params[:status] == 1
+                  @schedules = user.schedules.active_schedule
+                end
+              else
+                error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_params'),
+                       code: ErrorCodes::INVALID_PARAMS
+                     ]
+                   }, response: {})
+              end
+            end
+          else
+            error!(meta: {
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
+          end
+        end
+
         desc 'スケジュールの停止', notes: <<-NOTE
             <h1>スケジュールを停止します</h1>
           NOTE
@@ -304,8 +357,7 @@ module API
                    }, response: {})
           end
         end
-      end
-      resource :schedule do
+
         desc 'スケジュールの作成', notes: <<-NOTE
             <h1>スケジュールを作成します</h1>
             <p>
