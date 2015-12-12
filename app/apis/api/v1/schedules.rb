@@ -13,243 +13,242 @@ module API
 
         def invalid_cron
           error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.invalid_cron'),
-                           code: ErrorCodes::INVALID_CRON
-                         ]
-                       }, response: {})
+                   status: 400,
+                   errors: [
+                     message: ('errors.messages.invalid_cron'),
+                     code: ErrorCodes::INVALID_CRON
+                   ]
+                 }, response: {})
         end
-        def cron_check_value value, index
+
+        def cron_check_value(value, index)
           if value =~ /^(([0-9]+)((\,||\-||\/)[0-9]+)*||\*(\/[0-9]+)?)$/
-            if integer_string?(value) || value == "*"
+            if integer_string?(value) || value == '*'
               case index
-              when 0 #分
-                if value == "*"
-                  return "毎分"
+              when 0 # 分
+                if value == '*'
+                  return '毎分'
                 elsif value.to_i <= 59 && value.to_i >= 0
-                  return value + "分に"
+                  return value + '分に'
                 else
                   invalid_cron
                 end
-              when 1 #時
-                if value == "*"
-                  return "毎時"
+              when 1 # 時
+                if value == '*'
+                  return '毎時'
                 elsif value.to_i <= 23 && value.to_i >= 0
-                  return value + "時"
+                  return value + '時'
                 else
                   invalid_cron
                 end
-              when 2 #日
-                if value == "*"
-                  return "毎日"
+              when 2 # 日
+                if value == '*'
+                  return '毎日'
                 elsif value.to_i <= 31 && value.to_i >= 1
-                  return value + "日"
+                  return value + '日'
                 else
                   invalid_cron
                 end
-              when 3 #月
-                if value == "*"
-                  return "毎月"
+              when 3 # 月
+                if value == '*'
+                  return '毎月'
                 elsif value.to_i <= 12 && value.to_i >= 1
-                  return value + "月"
+                  return value + '月'
                 else
                   invalid_cron
                 end
-              when 4 #曜日
-                if value == "*"
-                  return "毎曜日の"
+              when 4 # 曜日
+                if value == '*'
+                  return '毎曜日の'
                 elsif value.to_i <= 7 && value.to_i >= 0
                   case value.to_i
                   when 0
-                    return "日曜日の"
+                    return '日曜日の'
                   when 1
-                    return "月曜日の"
+                    return '月曜日の'
                   when 2
-                    return "火曜日の"
+                    return '火曜日の'
                   when 3
-                    return "水曜日の"
+                    return '水曜日の'
                   when 4
-                    return "木曜日の"
+                    return '木曜日の'
                   when 5
-                    return "金曜日の"
+                    return '金曜日の'
                   when 6
-                    return "土曜日の"
+                    return '土曜日の'
                   when 7
-                    return "日曜日の"
+                    return '日曜日の'
                   end
                 else
                   invalid_cron
                 end
               end
             else
-              response = ""
-              if value.include?("-")
-                value.split("-").each_with_index do |val, i|
+              response = ''
+              if value.include?('-')
+                value.split('-').each_with_index do |val, i|
                   if i == 0
                     case index
                     when 0
-                     response = response + val + "分から"
+                      response = response + val + '分から'
                     when 1
-                     response = response + val + "時から"
+                      response = response + val + '時から'
                     when 2
-                     response = response + val + "日から"
+                      response = response + val + '日から'
                     when 3
-                     response = response + val + "月から"
+                      response = response + val + '月から'
                     when 4
                       case val.to_i
                       when 0
-                        response = response + "日曜日から"
+                        response += '日曜日から'
                       when 1
-                        response = response + "月曜日から"
+                        response += '月曜日から'
                       when 2
-                        response = response + "火曜日から"
+                        response += '火曜日から'
                       when 3
-                        response = response + "水曜日から"
+                        response += '水曜日から'
                       when 4
-                        response = response + "木曜日から"
+                        response += '木曜日から'
                       when 5
-                        response = response + "金曜日から"
+                        response += '金曜日から'
                       when 6
-                        response = response + "土曜日から"
+                        response += '土曜日から'
                       when 7
-                        response = response + "日曜日から"
+                        response += '日曜日から'
                       end
                     end
                   else
-                    if val.include?("/")
-                      val = val.split("/")[0]
-                    end
+                    val = val.split('/')[0] if val.include?('/')
                     case index
                     when 0
-                     response = response + val + "分まで1分ごとに"
+                      response = response + val + '分まで1分ごとに'
                     when 1
-                     response = response + val + "時まで"
+                      response = response + val + '時まで'
                     when 2
-                     response = response + val + "日まで"
+                      response = response + val + '日まで'
                     when 3
-                     response = response + val + "月まで"
+                      response = response + val + '月まで'
                     when 4
                       case val.to_i
                       when 0
-                        response = response + "日曜日まで"
+                        response += '日曜日まで'
                       when 1
-                        response = response + "月曜日まで"
+                        response += '月曜日まで'
                       when 2
-                        response = response + "火曜日まで"
+                        response += '火曜日まで'
                       when 3
-                        response = response + "水曜日まで"
+                        response += '水曜日まで'
                       when 4
-                        response = response + "木曜日まで"
+                        response += '木曜日まで'
                       when 5
-                        response = response + "金曜日まで"
+                        response += '金曜日まで'
                       when 6
-                        response = response + "土曜日まで"
+                        response += '土曜日まで'
                       when 7
-                        response = response + "日曜日まで"
+                        response += '日曜日まで'
                       end
                     end
                   end
                 end
               end
-              if value.include?("/")
-                value.split("/").each_with_index do |val, i|
+              if value.include?('/')
+                value.split('/').each_with_index do |val, i|
                   if i == 0
-                    unless val.include?("-")
+                    unless val.include?('-')
                       case index
                       when 0
-                        if val == "*"
+                        if val == '*'
                         else
-                          response = response + val + "分から"
+                          response = response + val + '分から'
                         end
                       when 1
-                        if val == "*"
+                        if val == '*'
                         else
-                          response = response + val + "時から"
+                          response = response + val + '時から'
                         end
                       when 2
-                        if val == "*"
+                        if val == '*'
                         else
-                          response = response + val + "日から"
+                          response = response + val + '日から'
                         end
                       when 3
-                        if val == "*"
+                        if val == '*'
                         else
-                          response = response + val + "月から"
+                          response = response + val + '月から'
                         end
                       when 4
                         case val.to_i
                         when 0
-                          response = response + "日曜日から"
+                          response += '日曜日から'
                         when 1
-                          response = response + "月曜日から"
+                          response += '月曜日から'
                         when 2
-                          response = response + "火曜日から"
+                          response += '火曜日から'
                         when 3
-                          response = response + "水曜日から"
+                          response += '水曜日から'
                         when 4
-                          response = response + "木曜日から"
+                          response += '木曜日から'
                         when 5
-                          response = response + "金曜日から"
+                          response += '金曜日から'
                         when 6
-                          response = response + "土曜日から"
+                          response += '土曜日から'
                         when 7
-                          response = response + "日曜日から"
+                          response += '日曜日から'
                         end
                       end
                     end
                   else
                     case index
                     when 0
-                     response = response + val + "分おきに"
+                      response = response + val + '分おきに'
                     when 1
-                     response = response + val + "時間おきに"
+                      response = response + val + '時間おきに'
                     when 2
-                     response = response + val + "日おきに"
+                      response = response + val + '日おきに'
                     when 3
-                     response = response + val + "月おきに"
+                      response = response + val + '月おきに'
                     when 4
                       invalid_cron
                     end
                   end
                 end
               end
-              if value.include?(",")
-                value.split(",").each_with_index do |val, i|
+              if value.include?(',')
+                value.split(',').each_with_index do |val, _i|
                   case index
                   when 0
-                    response = response + val + "分と"
+                    response = response + val + '分と'
                   when 1
-                    response = response + val + "時と"
+                    response = response + val + '時と'
                   when 2
-                    response = response + val + "日と"
+                    response = response + val + '日と'
                   when 3
-                    response = response + val + "月と"
+                    response = response + val + '月と'
                   when 4
                     case val.to_i
                     when 0
-                      response = response + "日曜日と"
+                      response += '日曜日と'
                     when 1
-                      response = response + "月曜日と"
+                      response += '月曜日と'
                     when 2
-                      response = response + "火曜日と"
+                      response += '火曜日と'
                     when 3
-                      response = response + "水曜日と"
+                      response += '水曜日と'
                     when 4
-                      response = response + "木曜日と"
+                      response += '木曜日と'
                     when 5
-                      response = response + "金曜日と"
+                      response += '金曜日と'
                     when 6
-                      response = response + "土曜日と"
+                      response += '土曜日と'
                     when 7
-                      response = response + "日曜日と"
+                      response += '日曜日と'
                     end
                   end
                 end
                 if index == 0
-                  response.gsub!(/と$/u, "に")
+                  response.gsub!(/と$/u, 'に')
                 else
-                  response.gsub!(/と$/u, "の")
+                  response.gsub!(/と$/u, 'の')
                 end
               end
               return response
@@ -294,12 +293,12 @@ module API
                 end
               else
                 error!(meta: {
-                     status: 400,
-                     errors: [
-                       message: ('errors.messages.invalid_params'),
-                       code: ErrorCodes::INVALID_PARAMS
-                     ]
-                   }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.invalid_params'),
+                           code: ErrorCodes::INVALID_PARAMS
+                         ]
+                       }, response: {})
               end
             end
           else
@@ -337,14 +336,14 @@ module API
               if schedule = user.schedules.find_by(id: params[:schedule_id])
                 if schedule.active_schedule?
                   error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.schedule_already_set'),
-                         code: ErrorCodes::ALREADY_EXISTING
-                       ]
-                     }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.schedule_already_set'),
+                             code: ErrorCodes::ALREADY_EXISTING
+                           ]
+                         }, response: {})
                 else
-                  Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: schedule.cron, args: schedule})
+                  Resque.set_schedule("#{schedule.job_name}", class: 'ResqueInfraredSendJob', cron: schedule.cron, args: schedule)
                   schedule.update(status: :active_schedule)
                   log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを稼働しました", status: :robot_activate_schedule)
                   log.infrared = schedule.infrared
@@ -352,12 +351,12 @@ module API
                 end
               else
                 error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.schedule_not_found'),
-                         code: ErrorCodes::NOT_FOUND_SCHEDULE
-                       ]
-                     }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.schedule_not_found'),
+                           code: ErrorCodes::NOT_FOUND_SCHEDULE
+                         ]
+                       }, response: {})
               end
             end
           else
@@ -397,12 +396,12 @@ module API
                 @schedule = schedule
               else
                 error!(meta: {
-                       status: 400,
-                       errors: [
-                         message: ('errors.messages.schedule_not_found'),
-                         code: ErrorCodes::NOT_FOUND_SCHEDULE
-                       ]
-                     }, response: {})
+                         status: 400,
+                         errors: [
+                           message: ('errors.messages.schedule_not_found'),
+                           code: ErrorCodes::NOT_FOUND_SCHEDULE
+                         ]
+                       }, response: {})
               end
             end
           else
@@ -439,39 +438,37 @@ module API
                        ]
                      }, response: {})
             else
-              if(infrared = Infrared.find_by(id: params[:ir_id]))
+              if (infrared = Infrared.find_by(id: params[:ir_id]))
                 cron = params[:cron]
-                cron_a = cron.split(" ")
-                message = " "
+                cron_a = cron.split(' ')
+                message = ' '
                 isEveryWord = false
                 if cron_a.size == 5
                   cron_a.each_with_index do |c, index|
-                    if cron_check_value(c,index).to_s.include?("毎")
+                    if cron_check_value(c, index).to_s.include?('毎')
                       if isEveryWord
                       else
-                        isEveryWord =true
-                        message = cron_check_value(c,index).to_s + message
+                        isEveryWord = true
+                        message = cron_check_value(c, index).to_s + message
                       end
                     else
-                      if index == 4 && cron_a[4] != "*"
-                        message.gsub!(/毎日/u,"")
-                        message.gsub!(/毎月/u,"")
-                        message = cron_check_value(c,index).to_s + message
-                        if cron_a[2] != "*"
-                          message.gsub!(/曜日の/u,"曜日と")
-                        end
+                      if index == 4 && cron_a[4] != '*'
+                        message.gsub!(/毎日/u, '')
+                        message.gsub!(/毎月/u, '')
+                        message = cron_check_value(c, index).to_s + message
+                        message.gsub!(/曜日の/u, '曜日と') if cron_a[2] != '*'
                       else
-                        message = cron_check_value(c,index).to_s + message
+                        message = cron_check_value(c, index).to_s + message
                       end
                     end
                   end
-                  message.gsub!(/時毎分/u,"時に毎分")
-                  message = message + "実行します"
+                  message.gsub!(/時毎分/u, '時に毎分')
+                  message += '実行します'
                   schedule = user.schedules.create(name: params[:name], cron: params[:cron])
                   cron = params[:cron]
                   schedule.update(description: "#{message}", cron: "#{cron}", job_name: "schedule_#{user.id}_#{schedule.id}")
                   infrared.schedule = schedule
-                  Resque.set_schedule("#{schedule.job_name}", { class: "ResqueInfraredSendJob", cron: cron, args: schedule})
+                  Resque.set_schedule("#{schedule.job_name}", { class: 'ResqueInfraredSendJob', cron: cron, args: schedule })
                   schedule.update(status: :active_schedule)
                   log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :robot_create_schedule)
                   log.infrared = infrared
@@ -479,12 +476,12 @@ module API
                   @message = message
                 else
                   error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.invalid_cron'),
-                           code: ErrorCodes::INVALID_CRON
-                         ]
-                       }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.invalid_cron'),
+                             code: ErrorCodes::INVALID_CRON
+                           ]
+                         }, response: {})
                 end
               else
                 error!(meta: {
