@@ -124,7 +124,7 @@ int getActivateTime(int status)
     start = getTime();
     while( digitalRead(pin) == status )
     {
-        delayMicroseconds(span);
+      delayMicroseconds(span);
       count++;
       if(count > max){ break; }
     }
