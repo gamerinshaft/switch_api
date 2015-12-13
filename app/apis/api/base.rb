@@ -40,7 +40,17 @@ module API
         return @user if @user
         if (token = AuthToken.find_by(token: params[:auth_token]))
           update_auth_token token
-          @user = token.user
+          unless token.user.destroyed?
+            @user = token.user
+          else
+            error!(meta: {
+                   status: 400,
+                   errors: [
+                     message: ('errors.messages.invalid_auth_token'),
+                     code: ErrorCodes::INVALID_TOKEN
+                   ]
+                 }, response: {})
+          end
         else
           error!(meta: {
                    status: 400,
