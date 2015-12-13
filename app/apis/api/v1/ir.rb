@@ -24,7 +24,7 @@ module API
                        ]
                      }, response: {})
             else
-              @infrareds = user.infrareds
+              @infrareds = user.infrareds.without_soft_destroyed.all
             end
           else
             error!(meta: {
@@ -125,7 +125,7 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 fname = infrared.data
                 path = Rails.root.to_s
                 command = File.join(path, 'commands/send')
@@ -177,7 +177,7 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 infrared.update(name: params[:name])
                 log = user.logs.create(name: "「#{infrared.name}」に名前を変更しました", status: :update_ir)
                 infrared.logs << log
@@ -223,7 +223,7 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 name = infrared.data
                 file = Rails.root.to_s + '/data/' + name
                 File.delete file
