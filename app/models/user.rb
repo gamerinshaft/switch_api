@@ -10,11 +10,13 @@ class User < ActiveRecord::Base
   has_many :log_infrareds, through: :logs, source: :loggable, source_type: 'Infrared'
   has_many :log_schedules, through: :logs, source: :loggable, source_type: 'Schedule'
 
-  def self.schedule_logs
+  private
+
+  def schedule_logs
     self.logs.where(loggable_type: "Schedule")
   end
 
-  def self.infrared_logs
+  def infrared_logs
     self.logs.where(loggable_type: "Infrared")
   end
 end
