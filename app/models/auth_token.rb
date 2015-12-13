@@ -1,4 +1,5 @@
 class AuthToken < ActiveRecord::Base
+  soft_deletable dependent_associations: [:user]
   belongs_to :user
 
   validates :user, presence: true
