@@ -2,7 +2,7 @@ class ResqueInfraredSendJob
   @queue = :resque_infrared_send_job
   def self.perform(task)
     # path = File.expand_path("log/resque_infrared_send_job.log", Rails.root)
-    schedule = Schedule.find_by(id: task['id'])
+    schedule = Schedule.without_soft_destroyed.find_by(id: task['id'])
     user = schedule.user
     infrared = schedule.infrared
     fname = infrared.data
@@ -12,6 +12,6 @@ class ResqueInfraredSendJob
     count = infrared.count + 1
     infrared.update(count: count)
     log = user.logs.create(name: "「#{schedule.name}」のスケジューラーが「#{infrared.name}」を実行しました", status: :robot_send_ir)
-    log.infrared = infrared
+    infrared.logs << log
   end
 end
