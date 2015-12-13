@@ -190,7 +190,7 @@ module API
                     if !group.infrareds.find_by(id: params[:ir_id])
                       group.infrareds << infrared
                       log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
-                      log.infrared = infrared
+                      infrared.logs << log
                       @group = group
                       @infrared = infrared
                     else
@@ -261,7 +261,7 @@ module API
                       @infrared = infrared
                       relational.destroy
                       log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」から削除しました", status: :remove_ir)
-                      log.infrared = infrared
+                      infrared.logs << log
                     else
                       error!(meta: {
                                status: 400,
