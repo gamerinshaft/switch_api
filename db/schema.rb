@@ -58,13 +58,11 @@ ActiveRecord::Schema.define(version: 20151212214054) do
     t.datetime "updated_at",    null: false
     t.string   "name"
     t.integer  "status"
-    t.integer  "schedule_id"
     t.integer  "loggable_id"
     t.string   "loggable_type"
   end
 
   add_index "logs", ["loggable_id"], name: "index_logs_on_loggable_id"
-  add_index "logs", ["schedule_id"], name: "index_logs_on_schedule_id"
   add_index "logs", ["user_id"], name: "index_logs_on_user_id"
 
   create_table "schedules", force: :cascade do |t|
