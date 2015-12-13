@@ -325,12 +325,12 @@ module API
             else
               @user = user
               if params[:status].nil?
-                @schedules = user.schedules
+                @schedules = user.schedules.without_soft_destroyed.all
               elsif params[:status].to_s =~ /^[0-1]$/
                 if params[:status] == 0
-                  @schedules = user.schedules.inactive_schedule
+                  @schedules = user.schedules.without_soft_destroyed.all.inactive_schedule
                 elsif params[:status] == 1
-                  @schedules = user.schedules.active_schedule
+                  @schedules = user.schedules.without_soft_destroyed.all.active_schedule
                 end
               else
                 error!(meta: {
@@ -374,7 +374,7 @@ module API
                        ]
                      }, response: {})
             else
-              if schedule = user.schedules.find_by(id: params[:schedule_id])
+              if schedule = user.schedules.without_soft_destroyed.find_by(id: params[:schedule_id])
                 if schedule.active_schedule?
                   error!(meta: {
                            status: 400,
@@ -429,7 +429,7 @@ module API
                        ]
                      }, response: {})
             else
-              if schedule = user.schedules.find_by(id: params[:schedule_id])
+              if schedule = user.schedules.without_soft_destroyed.find_by(id: params[:schedule_id])
                 if schedule.active_schedule?
                   Resque.remove_schedule(schedule.job_name)
                   schedule.update(status: :inactive_schedule)
@@ -485,7 +485,7 @@ module API
                        ]
                      }, response: {})
             else
-              if schedule = user.schedules.find_by(id: params[:schedule_id])
+              if schedule = user.schedules.without_soft_destroyed.find_by(id: params[:schedule_id])
                 schedule.update(name: params[:name])
                 log = user.logs.create(name: "「スケジューラーを#{schedule.name}」にリネームしました", status: :update_schedule)
                 schedule.logs << log
@@ -534,7 +534,7 @@ module API
                        ]
                      }, response: {})
             else
-              if (infrared = Infrared.find_by(id: params[:ir_id]))
+              if (infrared = Infrared.without_soft_destroyed.find_by(id: params[:ir_id]))
                 cron = params[:cron]
                 cron_a = cron.split(' ')
                 translation = cron_translator(cron_a)
@@ -586,7 +586,7 @@ module API
                        ]
                      }, response: {})
             else
-              if schedule = user.schedules.find_by(id: params[:schedule_id])
+              if schedule = user.schedules.without_soft_destroyed.find_by(id: params[:schedule_id])
                 if schedule.active_schedule?
                   Resque.remove_schedule(schedule.job_name)
                 end
