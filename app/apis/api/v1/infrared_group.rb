@@ -167,12 +167,13 @@ module API
               <h1>グループに赤外線を追加する</h1>
               <p>
                 グループに赤外線を追加します。
+                カンマ区切りでir_idを渡すと複数の赤外線を一気に登録できます。
               </p>
             NOTE
           params do
             requires :auth_token, type: String, desc: 'Auth token.'
             requires :group_id, type: Integer, desc: 'Group_id.'
-            requires :ir_id, type: Integer, desc: 'IR_id.'
+            requires :ir_id, type: String, desc: 'IR_id.'
           end
           post '/', jbuilder: 'api/v1/group/ir/add' do
             if (token = AuthToken.find_by(token: params[:auth_token]))
@@ -186,30 +187,61 @@ module API
                        }, response: {})
               else
                 if group = user.infrared_groups.find_by(id: params[:group_id])
-                  if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
-                    if !group.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
-                      group.infrareds << infrared
-                      log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
-                      infrared.logs << log
-                      @group = group
-                      @infrared = infrared
+                  if params[:ir_id] =~ /^[0-9]+$/
+                    if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
+                      if !group.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
+                        group.infrareds << infrared
+                        log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
+                        infrared.logs << log
+                        @group = group
+                        @infrared = infrared
+                      else
+                        error!(meta: {
+                                 status: 400,
+                                 errors: [
+                                   message: ('errors.messages.ir_already_existing'),
+                                   code: ErrorCodes::ALREADY_EXISTING
+                                 ]
+                               }, response: {})
+                      end
                     else
                       error!(meta: {
                                status: 400,
                                errors: [
-                                 message: ('errors.messages.ir_already_existing'),
-                                 code: ErrorCodes::ALREADY_EXISTING
+                                 message: ('errors.messages.ir_not_found'),
+                                 code: ErrorCodes::NOT_FOUND
                                ]
                              }, response: {})
                     end
+                  elsif params[:ir_id] =~ /^(([0-9]+)((\,||\-||\/)[0-9]+)*)$/
+                    infrareds = params[:ir_id].split(",")
+                    infrareds.each do |infrared|
+                      if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
+                        if !group.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
+                          group.infrareds << infrared
+                          log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
+                          infrared.logs << log
+                          @group = group
+                          @infrared = infrared
+                        end
+                      else
+                        error!(meta: {
+                                 status: 400,
+                                 errors: [
+                                   message: ('errors.messages.ir_not_found'),
+                                   code: ErrorCodes::NOT_FOUND
+                                 ]
+                               }, response: {})
+                      end
+                    end
                   else
                     error!(meta: {
-                             status: 400,
-                             errors: [
-                               message: ('errors.messages.ir_not_found'),
-                               code: ErrorCodes::NOT_FOUND
-                             ]
-                           }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.invalid_params'),
+                             code: ErrorCodes::INVALID_PARAMS
+                           ]
+                         }, response: {})
                   end
                 else
                   error!(meta: {
