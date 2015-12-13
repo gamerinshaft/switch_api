@@ -13,7 +13,7 @@ circleCIでテストを動かして通らない場合はプルリクを受け付
 ### 受信コマンドコンパイル
 
 ```sh
-$ sudo gcc recieve.c -o recieve -lwiringPi
+$ sudo gcc receive.c -o receive -lwiringPi
 ```
 
 ### 送信コマンドコンパイル

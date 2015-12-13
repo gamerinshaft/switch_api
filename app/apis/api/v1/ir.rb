@@ -48,7 +48,7 @@ module API
           requires :auth_token, type: String, desc: 'Auth token.'
           optional :group_id, type: Integer, desc: 'Group ID.'
         end
-        post '/recieve', jbuilder: 'api/v1/ir/recieve' do
+        post '/receive', jbuilder: 'api/v1/ir/receive' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if user.info.nil?
               error!(meta: {
@@ -61,7 +61,7 @@ module API
             else
               infrared = user.infrareds.create(name: '名無しの赤外線', data: '')
               path = Rails.root.to_s
-              command = File.join(path, 'commands/recieve')
+              command = File.join(path, 'commands/receive')
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               if File.read("#{path}/data/#{fname}").size == 0
@@ -75,7 +75,7 @@ module API
                        }, response: {})
               end
               infrared.update(data: "#{fname}")
-              log = user.logs.create(name: '赤外線を受信しました', status: :recieve_ir)
+              log = user.logs.create(name: '赤外線を受信しました', status: :receive_ir)
               infrared.logs << log
               unless params[:group_id].nil?
                 if group = user.infrared_groups.find_by(id: params[:group_id])
