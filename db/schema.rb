@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212214054) do
+ActiveRecord::Schema.define(version: 20151213055014) do
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "token"
@@ -45,11 +45,13 @@ ActiveRecord::Schema.define(version: 20151212214054) do
     t.string   "name"
     t.string   "data"
     t.integer  "user_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "count",      default: 0
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "count",             default: 0
+    t.datetime "soft_destroyed_at"
   end
 
+  add_index "infrareds", ["soft_destroyed_at"], name: "index_infrareds_on_soft_destroyed_at"
   add_index "infrareds", ["user_id"], name: "index_infrareds_on_user_id"
 
   create_table "logs", force: :cascade do |t|
@@ -58,13 +60,11 @@ ActiveRecord::Schema.define(version: 20151212214054) do
     t.datetime "updated_at",    null: false
     t.string   "name"
     t.integer  "status"
-    t.integer  "schedule_id"
     t.integer  "loggable_id"
     t.string   "loggable_type"
   end
 
   add_index "logs", ["loggable_id"], name: "index_logs_on_loggable_id"
-  add_index "logs", ["schedule_id"], name: "index_logs_on_schedule_id"
   add_index "logs", ["user_id"], name: "index_logs_on_user_id"
 
   create_table "schedules", force: :cascade do |t|
@@ -74,12 +74,14 @@ ActiveRecord::Schema.define(version: 20151212214054) do
     t.string   "job_name"
     t.integer  "user_id"
     t.integer  "infrared_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "status"
+    t.datetime "soft_destroyed_at"
   end
 
   add_index "schedules", ["infrared_id"], name: "index_schedules_on_infrared_id"
+  add_index "schedules", ["soft_destroyed_at"], name: "index_schedules_on_soft_destroyed_at"
   add_index "schedules", ["user_id"], name: "index_schedules_on_user_id"
 
   create_table "user_infos", force: :cascade do |t|
@@ -95,8 +97,11 @@ ActiveRecord::Schema.define(version: 20151212214054) do
   add_index "user_infos", ["user_id"], name: "index_user_infos_on_user_id"
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
   end
+
+  add_index "users", ["soft_destroyed_at"], name: "index_users_on_soft_destroyed_at"
 
 end

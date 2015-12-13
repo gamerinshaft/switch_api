@@ -41,6 +41,7 @@ gem 'redis'
 gem 'resque'
 gem 'resque-scheduler'
 gem 'rubocop', group: :development
+gem 'kakurenbo-puti'
 
 group :development, :test do
   gem 'byebug'

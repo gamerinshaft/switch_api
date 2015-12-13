@@ -24,7 +24,7 @@ module API
                        ]
                      }, response: {})
             else
-              @infrareds = user.infrareds
+              @infrareds = user.infrareds.without_soft_destroyed.all
             end
           else
             error!(meta: {
@@ -48,7 +48,7 @@ module API
           requires :auth_token, type: String, desc: 'Auth token.'
           optional :group_id, type: Integer, desc: 'Group ID.'
         end
-        post '/recieve', jbuilder: 'api/v1/ir/recieve' do
+        post '/receive', jbuilder: 'api/v1/ir/receive' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if user.info.nil?
               error!(meta: {
@@ -61,11 +61,11 @@ module API
             else
               infrared = user.infrareds.create(name: '名無しの赤外線', data: '')
               path = Rails.root.to_s
-              command = File.join(path, 'commands/recieve')
+              command = File.join(path, 'commands/receive')
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               if File.read("#{path}/data/#{fname}").size == 0
-                infrared.destroy
+                infrared.soft_destroy
                 error!(meta: {
                          status: 400,
                          errors: [
@@ -75,7 +75,7 @@ module API
                        }, response: {})
               end
               infrared.update(data: "#{fname}")
-              log = user.logs.create(name: '赤外線を受信しました', status: :recieve_ir)
+              log = user.logs.create(name: '赤外線を受信しました', status: :receive_ir)
               infrared.logs << log
               unless params[:group_id].nil?
                 if group = user.infrared_groups.find_by(id: params[:group_id])
@@ -125,7 +125,7 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 fname = infrared.data
                 path = Rails.root.to_s
                 command = File.join(path, 'commands/send')
@@ -177,7 +177,7 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 infrared.update(name: params[:name])
                 log = user.logs.create(name: "「#{infrared.name}」に名前を変更しました", status: :update_ir)
                 infrared.logs << log
@@ -223,13 +223,13 @@ module API
                        ]
                      }, response: {})
             else
-              if infrared = user.infrareds.find_by(id: params[:ir_id])
+              if infrared = user.infrareds.without_soft_destroyed.find_by(id: params[:ir_id])
                 name = infrared.data
                 file = Rails.root.to_s + '/data/' + name
                 File.delete file
                 log = user.logs.create(name: "「#{infrared.name}」を削除しました", status: :destroy_ir)
                 infrared.logs << log
-                infrared.destroy
+                infrared.soft_destroy
               else
                 error!(meta: {
                          status: 400,
