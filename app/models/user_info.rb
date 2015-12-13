@@ -1,4 +1,5 @@
 class UserInfo < ActiveRecord::Base
+  soft_deletable dependent_associations: [:user]
   belongs_to :user
 
   before_validation do
