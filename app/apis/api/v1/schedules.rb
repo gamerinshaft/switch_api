@@ -387,7 +387,7 @@ module API
                   Resque.set_schedule("#{schedule.job_name}", class: 'ResqueInfraredSendJob', cron: schedule.cron, args: schedule)
                   schedule.update(status: :active_schedule)
                   log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを稼働しました", status: :activate_schedule)
-                  log.infrared = schedule.infrared
+                  schedule.logs << log
                   @schedule = schedule
                 end
               else
@@ -434,7 +434,7 @@ module API
                   Resque.remove_schedule(schedule.job_name)
                   schedule.update(status: :inactive_schedule)
                   log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを停止しました", status: :remove_schedule)
-                  log.infrared = schedule.infrared
+                  schedule.logs << log
                   @schedule = schedule
                 else
                   error!(meta: {
@@ -488,7 +488,7 @@ module API
               if schedule = user.schedules.find_by(id: params[:schedule_id])
                 schedule.update(name: params[:name])
                 log = user.logs.create(name: "「スケジューラーを#{schedule.name}」にリネームしました", status: :update_schedule)
-                log.infrared = schedule.infrared
+                schedule.logs << log
                 @schedule = schedule
               else
                 error!(meta: {
@@ -545,7 +545,7 @@ module API
                 Resque.set_schedule("#{schedule.job_name}", { class: 'ResqueInfraredSendJob', cron: cron, args: schedule })
                 schedule.update(status: :active_schedule)
                 log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを作成、稼働しました", status: :create_schedule)
-                log.infrared = infrared
+                schedule.logs << log
                 @schedule = schedule
               else
                 error!(meta: {
@@ -592,7 +592,7 @@ module API
                 end
                 schedule.destroy
                 log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを削除しました", status: :delete_schedule)
-                log.infrared = schedule.infrared
+                schedule.logs << log
               else
                 error!(meta: {
                          status: 400,
