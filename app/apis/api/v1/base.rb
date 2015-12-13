@@ -35,6 +35,7 @@ module API
       mount V1::IR
       mount V1::InfraredGroup
       mount V1::Schedules
+      mount V1::Logs
       add_swagger_documentation format: :json, api_version: 'v1', hide_documentation_path: true
     end
   end
