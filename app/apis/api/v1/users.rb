@@ -47,7 +47,7 @@ module API
             if params[:password]
               if check_password(info, params[:password])
                 name = user.info.screen_name
-                user.destroy
+                user.soft_destroy
                 @message = "#{name}さんは退会しました。"
               end
             else
@@ -61,7 +61,7 @@ module API
               false
             end
           else
-            user.destroy
+            user.soft_destroy
             @message = '退会しました。'
           end
         end

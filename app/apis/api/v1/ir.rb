@@ -65,7 +65,7 @@ module API
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               if File.read("#{path}/data/#{fname}").size == 0
-                infrared.destroy
+                infrared.soft_destroy
                 error!(meta: {
                          status: 400,
                          errors: [
@@ -229,7 +229,7 @@ module API
                 File.delete file
                 log = user.logs.create(name: "「#{infrared.name}」を削除しました", status: :destroy_ir)
                 infrared.logs << log
-                infrared.destroy
+                infrared.soft_destroy
               else
                 error!(meta: {
                          status: 400,

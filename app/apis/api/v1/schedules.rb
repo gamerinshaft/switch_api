@@ -590,7 +590,7 @@ module API
                 if schedule.active_schedule?
                   Resque.remove_schedule(schedule.job_name)
                 end
-                schedule.destroy
+                schedule.soft_destroy
                 log = user.logs.create(name: "「#{schedule.name}」のスケジューラーを削除しました", status: :delete_schedule)
                 schedule.logs << log
               else
