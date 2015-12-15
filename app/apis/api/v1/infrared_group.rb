@@ -356,7 +356,7 @@ module API
               else
                 if group = user.infrared_groups.find_by(id: params[:group_id])
                   @group = group
-                  @infrareds = group.infrareds
+                  @infrareds = group.infrareds.without_soft_destroyed.all
                 else
                   error!(meta: {
                            status: 400,
