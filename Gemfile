@@ -42,7 +42,6 @@ gem 'resque'
 gem 'resque-scheduler'
 gem 'rubocop', group: :development
 gem 'kakurenbo-puti'
-gem 'pi_piper'
 
 group :development, :test do
   gem 'byebug'
