@@ -9,5 +9,5 @@ volt = (value * 3300)/1024
 degree = volt/10.0
 
 File.open(ARGV[0], "w") do |file|
- file.print(volt)
+ file.print(degree)
 end
