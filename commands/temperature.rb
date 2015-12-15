@@ -8,6 +8,6 @@ end
 volt = (value * 3300)/1024
 degree = (volt - 500)/10
 
-File.open("temperature.txt", "w") do |file|
+File.open(ARGV[0], "w") do |file|
  file.print(volt)
 end
