@@ -6,7 +6,7 @@ PiPiper::Spi.begin do |spi|
   value = ((raw[0]<<8) + raw[1]) & 0x03FF
 end
 volt = (value * 3300)/1024
-degree = (volt - 500)/10
+degree = volt/10.0
 
 File.open(ARGV[0], "w") do |file|
  file.print(volt)
