@@ -65,7 +65,7 @@ module API
               fname = "user_#{user.id}_ir_#{infrared.id}.txt"
               `#{command} #{path}/data/#{fname}`
               if File.read("#{path}/data/#{fname}").size == 0
-                infrared.soft_destroy
+                infrared.destroy
                 error!(meta: {
                          status: 400,
                          errors: [
@@ -81,7 +81,7 @@ module API
                 if group = user.infrared_groups.find_by(id: params[:group_id])
                   group.infrareds << infrared
                   log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
-                  log.infrared = infrared
+                  infrared.logs << log
                 else
                   error!(meta: {
                            status: 400,
