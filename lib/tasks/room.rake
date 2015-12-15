@@ -1,0 +1,2 @@
+namespace :room do
+end
