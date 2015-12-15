@@ -21,7 +21,7 @@ module API
             else
               @user = user
               job = "user_#{user.id}_temperature_get_cycle"
-              Resque.set_schedule(job, class: 'ResqueTemperatureGetJob', cron: "* * * * *", args: user)
+              Resque.set_schedule(job, class: 'ResqueTemperatureGetJob', cron: "*/5 * * * *", args: user)
             end
           else
             error!(meta: {
