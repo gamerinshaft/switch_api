@@ -9,7 +9,7 @@ module API
             アクセストークンは基本的にどんなリクエストをする時でも必要なので、値をキャッシュするようにしてください。
             </p>
           NOTE
-        get '/ping', jbuilder: 'api/v1/auth/ping' do
+        get '/ping', jbuilder: 'api/v1/extra/ping' do
 
         end
       end
