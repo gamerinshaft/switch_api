@@ -59,19 +59,12 @@ module API
             else
               @user = user
               if user.room.nil?
-                if params[:size].nil?
-                  @logs = user.room.temperatures.sort { |a, b| b <=> a }
-                else
-                  @logs = user.room.temperatures.last(params[:size].to_i).sort { |a, b| b <=> a }
-                end
+                user.create_room
+              end
+              if params[:size].nil?
+                @temperatures = user.room.temperatures.sort { |a, b| b <=> a }
               else
-                error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.room_not_found'),
-                           code: ErrorCodes::NOT_FOUND_ROOM
-                         ]
-                       }, response: {})
+                @temperatures = user.room.temperatures.last(params[:size].to_i).sort { |a, b| b <=> a }
               end
             end
           else
