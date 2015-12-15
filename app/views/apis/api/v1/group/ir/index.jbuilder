@@ -4,6 +4,6 @@ json.meta do
 end
 json.response do
   json.group do
-    json.infrareds @group.infrareds
+    json.infrareds @infrareds
   end
 end
