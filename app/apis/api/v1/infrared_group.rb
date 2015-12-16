@@ -214,10 +214,10 @@ module API
                              }, response: {})
                     end
                   elsif params[:ir_id] =~ /^(([0-9]+)((\,||\-||\/)[0-9]+)*)$/
-                    infrareds = params[:ir_id].split(",")
+                    infrareds = params[:ir_id].split(',')
                     infrareds.each do |i|
                       if infrared = user.infrareds.without_soft_destroyed.find_by(id: i.to_i)
-                        if !group.infrareds.without_soft_destroyed.find_by(id: i.to_i)
+                        unless group.infrareds.without_soft_destroyed.find_by(id: i.to_i)
                           group.infrareds << infrared
                           log = user.logs.create(name: "「#{infrared.name}」を「#{group.name}」に追加しました", status: :add_ir)
                           infrared.logs << log
@@ -236,12 +236,12 @@ module API
                     end
                   else
                     error!(meta: {
-                           status: 400,
-                           errors: [
-                             message: ('errors.messages.invalid_params'),
-                             code: ErrorCodes::INVALID_PARAMS
-                           ]
-                         }, response: {})
+                             status: 400,
+                             errors: [
+                               message: ('errors.messages.invalid_params'),
+                               code: ErrorCodes::INVALID_PARAMS
+                             ]
+                           }, response: {})
                   end
                 else
                   error!(meta: {

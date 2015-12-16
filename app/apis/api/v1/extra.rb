@@ -8,7 +8,7 @@ module API
         params do
           requires :auth_token, type: String, desc: 'Auth token.'
         end
-        post '/temperature/start', jbuilder: 'api/v1/extra/temperature_start'  do
+        post '/temperature/start', jbuilder: 'api/v1/extra/temperature_start' do
           if (token = AuthToken.find_by(token: params[:auth_token]))
             if user.info.nil?
               error!(meta: {
@@ -21,7 +21,7 @@ module API
             else
               @user = user
               job = "user_#{user.id}_temperature_get_cycle"
-              Resque.set_schedule(job, class: 'ResqueTemperatureGetJob', cron: "*/5 * * * *", args: user)
+              Resque.set_schedule(job, class: 'ResqueTemperatureGetJob', cron: '*/5 * * * *', args: user)
             end
           else
             error!(meta: {
@@ -58,9 +58,7 @@ module API
                      }, response: {})
             else
               @user = user
-              if user.room.nil?
-                user.create_room
-              end
+              user.create_room if user.room.nil?
               if params[:size].nil?
                 @temperatures = user.room.temperatures.sort { |a, b| b <=> a }
               else

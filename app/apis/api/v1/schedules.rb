@@ -50,6 +50,7 @@ module API
             invalid_cron
           end
         end
+
         def cron_check_value(value, index)
           if value =~ /^(([0-9]+)((\,||\-||\/)[0-9]+)*||\*(\/[0-9]+)?)$/
             if integer_string?(value) || value == '*'
@@ -438,12 +439,12 @@ module API
                   @schedule = schedule
                 else
                   error!(meta: {
-                         status: 400,
-                         errors: [
-                           message: ('errors.messages.schedule_not_activate'),
-                           code: ErrorCodes::NOT_ACTIVATE_SCHEDULE
-                         ]
-                       }, response: {})
+                           status: 400,
+                           errors: [
+                             message: ('errors.messages.schedule_not_activate'),
+                             code: ErrorCodes::NOT_ACTIVATE_SCHEDULE
+                           ]
+                         }, response: {})
                 end
               else
                 error!(meta: {

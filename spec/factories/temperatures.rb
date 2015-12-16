@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :temperature do
     room nil
-centigrade "MyString"
+    centigrade 'MyString'
   end
-
 end

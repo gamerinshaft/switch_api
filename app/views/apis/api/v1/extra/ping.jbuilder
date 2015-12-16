@@ -1,1 +1,1 @@
-json.message "pong"
+json.message 'pong'

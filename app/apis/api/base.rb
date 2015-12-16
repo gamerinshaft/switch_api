@@ -44,12 +44,12 @@ module API
             @user = token.user
           else
             error!(meta: {
-                   status: 400,
-                   errors: [
-                     message: ('errors.messages.invalid_auth_token'),
-                     code: ErrorCodes::INVALID_TOKEN
-                   ]
-                 }, response: {})
+                     status: 400,
+                     errors: [
+                       message: ('errors.messages.invalid_auth_token'),
+                       code: ErrorCodes::INVALID_TOKEN
+                     ]
+                   }, response: {})
           end
         else
           error!(meta: {

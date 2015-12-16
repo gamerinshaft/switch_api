@@ -12,10 +12,10 @@ class User < ActiveRecord::Base
   has_many :log_schedules, through: :logs, source: :loggable, source_type: 'Schedule'
 
   def schedule_logs
-    self.logs.where(loggable_type: "Schedule")
+    logs.where(loggable_type: 'Schedule')
   end
 
   def infrared_logs
-    self.logs.where(loggable_type: "Infrared")
+    logs.where(loggable_type: 'Infrared')
   end
 end
