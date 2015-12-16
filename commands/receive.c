@@ -1,8 +1,9 @@
 #include <wiringPi.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <stdlib.h>
+
 
 int readable = 1;       // 非同期でイベントが発生した場合、コールバックにより0に設定される
 int pin = 7;       // 入力ピン番号(wiringpiの番号)
@@ -11,22 +12,8 @@ int bad_pin  = 24; // bad led
 int span = 10;      // 継続時間判定の間隔(us)
 int max_wait = 40000;   // 最大継続時間(us)
 
-void signalErrorCallBack(int sig)
-{
-    readable = 0;
-}
-
-double getTime() //tv_sec ： 指定する時間の1秒以上の部分,tv_usec ： 指定する時間の1秒未満の部分
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return ((double)(tv.tv_sec) * 1000000 + (double)(tv.tv_usec));
-}
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     int result;
-
     // スキャンデータを書きだすファイルのポインタを取得
     FILE *fp;
     char *fileName = "irdata.txt";
@@ -36,8 +23,6 @@ int main(int argc, char *argv[])
     }
     printf("write file: %s\n", fileName);
 
-    // signal関数は、シグナル（非同期イベント）が発生したときに、
-    // そのシグナルを受信して、シグナル特有の処理を行うシグナル処理関数（シグナルハンドラ）を登録します。
     if(signal(SIGINT, signalErrorCallBack) == SIG_ERR){
         exit(1);
     }
@@ -80,17 +65,25 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-int scan(FILE *fp)
-{
+void signalErrorCallBack(int sig){
+    readable = 0;
+}
+
+double getTime(){ //tv_sec ： 指定する時間の1秒以上の部分,tv_usec ： 指定する時間の1秒未満の部分
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return ((double)(tv.tv_sec) * 1000000 + (double)(tv.tv_usec));
+}
+
+int scan(FILE *fp){
     digitalWrite(good_pin, 1);
     digitalWrite(bad_pin, 1);
 
-    // 受光モジュールは受光するとLOWになる
     if(!digitalRead(pin)){ return 1; }
 
     int on, off, limit;
     limit = 0;
-    // 送信が開始されるまで待機
+
     while( readable && digitalRead(pin) && limit <= 50000000 ){
       limit++;
     }
@@ -102,7 +95,6 @@ int scan(FILE *fp)
       return 1;
     }
 
-    // 解析開始
     while( readable ){
         on = getActivateTime(0);
         off = getActivateTime(1);
@@ -115,8 +107,7 @@ int scan(FILE *fp)
     return 0;
 }
 
-int getActivateTime(int status)
-{
+int getActivateTime(int status){
     int count = 0;
     int max = max_wait / span;
     double start, end;
@@ -133,7 +124,6 @@ int getActivateTime(int status)
     return getSpan(start, end);
 }
 
-int getSpan(double t1, double t2)
-{
+int getSpan(double t1, double t2){
     return (int)(t2-t1);
 }
