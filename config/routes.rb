@@ -1,6 +1,8 @@
 require 'resque/server'
 
 Rails.application.routes.draw do
+  get 'temperatures/index'
+
   mount Resque::Server.new, at: '/resque'
   mount API::Base => '/'
 
