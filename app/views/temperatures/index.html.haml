@@ -1,0 +1,21 @@
+= Gon::Base.render_data({})
+
+%div#chart
+
+
+:javascript
+  var chart = c3.generate({
+    bindto: '#chart',
+    data: {
+      x: 'x',
+      xFormat: '%d %M',
+      columns: gon.ttevents,
+      type: 'line',
+    },
+    axis: {
+      x : {
+        type: 'timeseries'
+      }
+    }
+  });
+
