@@ -42,6 +42,7 @@ gem 'resque'
 gem 'resque-scheduler'
 gem 'rubocop', group: :development
 gem 'kakurenbo-puti'
+gem 'gon'
 
 group :development, :test do
   gem 'byebug'
